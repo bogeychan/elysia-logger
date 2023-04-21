@@ -1,0 +1,47 @@
+{
+  "name": "@bogeychan/elysia-logger",
+  "version": "0.0.1",
+  "description": "A plugin for elysia for logging using the pino library",
+  "author": {
+    "name": "bogeychan",
+    "url": "https://github.com/bogeychan",
+    "email": "bogeychan@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bogeychan/elysia-logger"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.js",
+    "node": "./dist/index.js",
+    "default": "./dist/index.js"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "dev": "bun run --watch examples/pino-pretty/index.ts",
+    "test": "bun wiptest",
+    "build": "rm -fr dist && tsc --project tsconfig.esm.json",
+    "release": "npm run build && npm run test && npm publish --access public"
+  },
+  "peerDependencies": {
+    "elysia": ">= 0.4.9"
+  },
+  "devDependencies": {
+    "bun-types": "^0.5.8",
+    "elysia": "^0.4.9",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "pino": "^8.11.0"
+  },
+  "homepage": "https://github.com/bogeychan/elysia-logger",
+  "bugs": "https://github.com/bogeychan/elysia-logger/issues",
+  "license": "MIT",
+  "keywords": [
+    "elysia",
+    "pino"
+  ]
+}

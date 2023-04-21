@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^0.5.8"
+  },
+  "dependencies": {
+    "elysia": "^0.4.9",
+    "pino-pretty": "^10.0.0"
+  }
+}

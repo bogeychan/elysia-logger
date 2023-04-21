@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+bun.lockb
+
+node_modules
+tsconfig.json
+
+examples
+tests
+CHANGELOG.md
+tsconfig.esm.json
