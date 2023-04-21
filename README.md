@@ -1,6 +1,6 @@
 # @bogeychan/elysia-logger
 
-A plugin for [elysia](https://elysiajs.com) for logging using the [pino](https://getpino.io) library
+A plugin for [Elysia.js](https://elysiajs.com) for logging using the [pino](https://getpino.io) library
 
 ## Installation
 

@@ -1,7 +1,7 @@
 {
   "name": "@bogeychan/elysia-logger",
   "version": "0.0.2",
-  "description": "A plugin for elysia for logging using the pino library",
+  "description": "A plugin for Elysia.js for logging using the pino library",
   "author": {
     "name": "bogeychan",
     "url": "https://github.com/bogeychan",
