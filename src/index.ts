@@ -20,7 +20,7 @@ import { formatters, serializers } from './config';
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output (default behaviour).
  */
-export const logger = (options: StreamLoggerOptions) => plugin(options);
+export const logger = (options: StreamLoggerOptions = {}) => plugin(options);
 
 /**
  * A FileLogger lets you store log entries in a file.
