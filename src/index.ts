@@ -1,5 +1,5 @@
 import pino from 'pino';
-import Elysia from 'elysia';
+import Elysia, { Context } from 'elysia';
 
 import type {
   LoggerOptions,
@@ -54,6 +54,23 @@ export function createPinoLogger(options: LoggerOptions) {
 }
 
 function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
-  const log = createPinoLogger(options);
-  return (app: Elysia) => app.derive(() => ({ log }));
+  const { contextName, includeRequestContext, ...loggerOptions } = options
+
+
+
+  return (app: Elysia) => app.derive(({ request }: Context) => {
+    const log = createPinoLogger({
+      ...loggerOptions,
+      ...(includeRequestContext ? {
+        base: {
+          pid: '12345',
+          path: new URL(request.url).pathname
+        }
+      } : {})
+    });
+
+    return {
+      [`${contextName || 'log'}`]: log
+    }
+  });
 }

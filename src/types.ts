@@ -6,14 +6,14 @@ import type {
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
  */
-export type StreamLoggerOptions = PinoLoggerOptions & {
+export type StreamLoggerOptions = PinoLoggerOptions & BaseLoggerOptions & {
   stream?: DestinationStream;
 };
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export type FileLoggerOptions = PinoLoggerOptions & {
+export type FileLoggerOptions = PinoLoggerOptions & BaseLoggerOptions & {
   file: PathLike;
 };
 
@@ -21,3 +21,8 @@ export type FileLoggerOptions = PinoLoggerOptions & {
  * Combine all loggers into one to become even more powerful muhaha :D
  */
 export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
+
+type BaseLoggerOptions = {
+  contextName?: string;
+  includeRequestContext?: boolean;
+}
