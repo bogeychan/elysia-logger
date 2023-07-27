@@ -53,18 +53,22 @@ export function createPinoLogger(options: LoggerOptions) {
   return pino(options, streamOptions.stream!);
 }
 
+const randomId = (length = 20) => {
+  return (Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)).substring(0, length);
+};
+
 function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
   const { contextName, includeRequestContext, ...loggerOptions } = options
 
-
-
-  return (app: Elysia) => app.derive(({ request }: Context) => {
+  return (app: Elysia) => app.derive(({ request, query, params }: Context) => {
     const log = createPinoLogger({
       ...loggerOptions,
       ...(includeRequestContext ? {
         base: {
-          pid: '12345',
-          path: new URL(request.url).pathname
+          requestId: randomId(),
+          path: new URL(request.url).pathname,
+          query,
+          params
         }
       } : {})
     });
