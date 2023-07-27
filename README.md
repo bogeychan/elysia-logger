@@ -51,6 +51,41 @@ logger({
 });
 ```
 
+### Include additional request context info for debugging tools
+
+```ts
+import { logger } from '@bogeychan/elysia-logger';
+
+logger({
+  ...additional setup options,
+  includeRequestContext: true
+});
+```
+
+### Customize the logger name in the request context
+
+```ts
+import { Elysia } from 'elysia';
+import { logger } from '@bogeychan/elysia-logger';
+
+const app = new Elysia()
+  .use(
+    logger({
+      level: 'error',
+      contextKeyName: 'myLogger'
+    })
+  )
+  .get('/', (ctx) => {
+    ctx.myLogger.error(ctx, 'Context');
+    ctx.myLogger.info(ctx.request, 'Request'); // noop
+
+    return 'Hello World';
+  })
+  .listen(8080);
+
+console.log(`Listening on http://${app.server!.hostname}:${app.server!.port}`);
+```
+
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.
 
 ## Author

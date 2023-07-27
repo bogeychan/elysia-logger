@@ -58,7 +58,7 @@ const randomId = (length = 20) => {
 };
 
 function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
-  const { contextName, includeRequestContext, ...loggerOptions } = options
+  const { contextKeyName, includeRequestContext, ...loggerOptions } = options
 
   return (app: Elysia) => app.derive(({ request, query, params }: Context) => {
     const log = createPinoLogger({
@@ -74,7 +74,7 @@ function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
     });
 
     return {
-      [`${contextName || 'log'}`]: log
+      [`${contextKeyName || 'log'}`]: log
     }
   });
 }

@@ -23,6 +23,6 @@ export type FileLoggerOptions = PinoLoggerOptions & BaseLoggerOptions & {
 export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
 
 type BaseLoggerOptions = {
-  contextName?: string;
+  contextKeyName?: string;
   includeRequestContext?: boolean;
 }
