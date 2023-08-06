@@ -1,12 +1,13 @@
 import { Elysia } from 'elysia';
 import { randomUUID } from 'node:crypto';
 
-import { logger } from '../../src/index';
-import type {
-  ElysiaContextForInstance,
-  InferElysiaInstance
-} from '../../src/types';
-import { serializers, serializeRequest } from '../../src/config/serializers';
+import {
+  logger,
+  serializers,
+  serializeRequest,
+  InferElysiaInstance,
+  ElysiaContextForInstance
+} from '../../src/index';
 
 const mySerializers = {
   ...serializers,

@@ -15,12 +15,13 @@ export const formatters: LoggerOptions['formatters'] = {
   }
 };
 
-function isContext(object: unknown) {
+export function isContext(object: unknown) {
   const context = object as Context;
   return context.request && context.store;
 }
 
-function isRequest(object: unknown) {
+export function isRequest(object: unknown) {
   const request = object as Request;
   return request.url && request.method;
 }
+

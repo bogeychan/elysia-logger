@@ -75,3 +75,7 @@ function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
     });
 }
 
+export * from './config';
+
+export type { ElysiaContextForInstance, InferElysiaInstance } from './types';
+
