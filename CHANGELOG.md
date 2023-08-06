@@ -1,3 +1,9 @@
+# 0.0.4 - 07 Aug 2023
+
+Bug fix:
+
+- add missing exports
+
 # 0.0.3 - 06 Aug 2023
 
 Feature:
