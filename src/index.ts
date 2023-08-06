@@ -1,10 +1,11 @@
 import pino from 'pino';
-import Elysia from 'elysia';
+import Elysia, { Context } from 'elysia';
 
 import type {
   LoggerOptions,
   FileLoggerOptions,
-  StreamLoggerOptions
+  StreamLoggerOptions,
+  InferElysiaInstance
 } from './types';
 
 /**
@@ -54,6 +55,23 @@ export function createPinoLogger(options: LoggerOptions) {
 }
 
 function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
-  const log = createPinoLogger(options);
-  return (app: Elysia) => app.derive(() => ({ log }));
+  if (!options.contextKeyName) {
+    options.contextKeyName = 'log';
+  }
+
+  const { contextKeyName, ...loggerOptions } = options;
+
+  return (app: Elysia) =>
+    app.derive((ctx) => {
+      let log = createPinoLogger(loggerOptions);
+
+      if (typeof options.customProps === 'function') {
+        log = log.child(options.customProps(ctx));
+      }
+
+      return {
+        [contextKeyName]: log
+      };
+    });
 }
+
