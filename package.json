@@ -27,12 +27,12 @@
     "release": "npm run build && npm run test && npm publish --access public"
   },
   "peerDependencies": {
-    "elysia": ">= 0.4.9"
+    "elysia": ">= 0.6.0"
   },
   "devDependencies": {
-    "bun-types": "^0.5.8",
-    "elysia": "^0.4.9",
-    "typescript": "^5.0.4"
+    "bun-types": "^0.7.2",
+    "elysia": "^0.6.0",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "pino": "^8.11.0"

@@ -1,11 +1,10 @@
 import pino from 'pino';
-import Elysia, { Context } from 'elysia';
+import Elysia from 'elysia';
 
 import type {
   LoggerOptions,
   FileLoggerOptions,
-  StreamLoggerOptions,
-  InferElysiaInstance
+  StreamLoggerOptions
 } from './types';
 
 /**
@@ -66,6 +65,7 @@ function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
       let log = createPinoLogger(loggerOptions);
 
       if (typeof options.customProps === 'function') {
+        // @ts-ignore
         log = log.child(options.customProps(ctx));
       }
 

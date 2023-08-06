@@ -1,4 +1,4 @@
-# 0.0.3 - 23 Apr 2023
+# 0.0.3 - 06 Aug 2023
 
 Feature:
 
@@ -16,3 +16,4 @@ Bug fix:
 Feature:
 
 - `StreamLogger` & `FileLogger`
+
