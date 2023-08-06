@@ -4,7 +4,8 @@ import Elysia, { Context } from 'elysia';
 import type {
   LoggerOptions,
   FileLoggerOptions,
-  StreamLoggerOptions
+  StreamLoggerOptions,
+  InferElysiaInstance
 } from './types';
 
 /**
@@ -53,28 +54,24 @@ export function createPinoLogger(options: LoggerOptions) {
   return pino(options, streamOptions.stream!);
 }
 
-const randomId = (length = 20) => {
-  return (Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)).substring(0, length);
-};
-
 function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
-  const { contextKeyName, includeRequestContext, ...loggerOptions } = options
+  if (!options.contextKeyName) {
+    options.contextKeyName = 'log';
+  }
 
-  return (app: Elysia) => app.derive(({ request, query, params }: Context) => {
-    const log = createPinoLogger({
-      ...loggerOptions,
-      ...(includeRequestContext ? {
-        base: {
-          requestId: randomId(),
-          path: new URL(request.url).pathname,
-          query,
-          params
-        }
-      } : {})
+  const { contextKeyName, ...loggerOptions } = options;
+
+  return (app: Elysia) =>
+    app.derive((ctx) => {
+      let log = createPinoLogger(loggerOptions);
+
+      if (typeof options.customProps === 'function') {
+        log = log.child(options.customProps(ctx));
+      }
+
+      return {
+        [contextKeyName]: log
+      };
     });
-
-    return {
-      [`${contextKeyName || 'log'}`]: log
-    }
-  });
 }
+

@@ -56,11 +56,39 @@ logger({
 ```ts
 import { logger } from '@bogeychan/elysia-logger';
 
-logger({
-  ...additional setup options,
-  includeRequestContext: true
-});
+const myPlugin = () => (app: Elysia) => app.decorate('myProperty', 42);
+
+// ...
+
+app = app.use(myPlugin());
+
+app
+  .use(
+    logger({
+      /**
+       * This function will be invoked for each `log`-method called with `context`
+       * where you can pass additional properties that need to be logged
+       */
+      customProps(
+        ctx: ElysiaContextForInstance<InferElysiaInstance<typeof app>>
+      ) {
+        return {
+          params: ctx.params,
+          query: ctx.query,
+          myProperty: ctx.myProperty
+        };
+      }
+    })
+  )
+  .get('/', (ctx) => {
+    ctx.log.info(ctx, 'Context');
+
+    return 'with-context';
+  })
+  .listen(8080);
 ```
+
+You can find the entire example in the [examples](./examples/with-context) folder.
 
 ### Customize the logger name in the request context
 
@@ -71,13 +99,12 @@ import { logger } from '@bogeychan/elysia-logger';
 const app = new Elysia()
   .use(
     logger({
-      level: 'error',
       contextKeyName: 'myLogger'
     })
   )
   .get('/', (ctx) => {
-    ctx.myLogger.error(ctx, 'Context');
-    ctx.myLogger.info(ctx.request, 'Request'); // noop
+    // property "myLogger" is available instead of "log"
+    ctx.myLogger.info(ctx.request, 'Request');
 
     return 'Hello World';
   })
@@ -95,3 +122,4 @@ Checkout the [examples](./examples) folder on github for further use cases such 
 ## License
 
 [MIT](LICENSE)
+
