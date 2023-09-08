@@ -9,6 +9,12 @@ import {
   ElysiaContextForInstance
 } from '../../src/index';
 
+/**
+ * the following coding shows how you can influence what is logged out:
+ *
+ * - request id based on "X-Request-ID"-header or random generation
+ * - additional properties based on your custom context
+ */
 const mySerializers = {
   ...serializers,
   request: (request: Request) => {

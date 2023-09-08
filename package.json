@@ -27,15 +27,15 @@
     "release": "npm run build && npm run test && npm publish --access public"
   },
   "peerDependencies": {
-    "elysia": ">= 0.6.0"
+    "elysia": ">= 0.6.19"
   },
   "devDependencies": {
-    "bun-types": "^0.7.2",
-    "elysia": "^0.6.0",
-    "typescript": "^5.1.6"
+    "bun-types": "^1.0.1",
+    "elysia": "^0.6.19",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "pino": "^8.11.0"
+    "pino": "^8.15.1"
   },
   "homepage": "https://github.com/bogeychan/elysia-logger",
   "bugs": "https://github.com/bogeychan/elysia-logger/issues",

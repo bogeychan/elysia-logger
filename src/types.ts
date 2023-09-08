@@ -46,7 +46,9 @@ type BaseLoggerOptions = PinoLoggerOptions & {
   ) => object;
 };
 
-export type InferElysiaInstance<T> = T extends Elysia<infer U> ? U : never;
+export type InferElysiaInstance<T> = T extends Elysia<infer _BasePath, infer U>
+  ? U
+  : never;
 
 export type ElysiaContextForInstance<Instance extends ElysiaInstance> = Context<
   Instance['schema'],

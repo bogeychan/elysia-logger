@@ -2,9 +2,10 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "bun-types": "^0.7.2"
+    "bun-types": "^1.0.1"
   },
   "dependencies": {
-    "elysia": "^0.6.0"
+    "elysia": "^0.6.19",
+    "typescript": "^5.2.2"
   }
 }
