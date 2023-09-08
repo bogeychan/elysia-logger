@@ -22,7 +22,7 @@
   "types": "./src/index.ts",
   "scripts": {
     "dev": "bun run --watch examples/pino-pretty/index.ts",
-    "test": "bun wiptest",
+    "test": "bun test",
     "build": "rm -fr dist && tsc --project tsconfig.esm.json",
     "release": "npm run build && npm run test && npm publish --access public"
   },
