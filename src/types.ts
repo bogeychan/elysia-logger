@@ -7,23 +7,27 @@ import type {
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
  */
-export type StreamLoggerOptions = BaseLoggerOptions & {
-  stream?: DestinationStream;
-};
+export type StreamLoggerOptions<ContextKeyName extends string> =
+  BaseLoggerOptions<ContextKeyName> & {
+    stream?: DestinationStream;
+  };
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export type FileLoggerOptions = BaseLoggerOptions & {
-  file: PathLike;
-};
+export type FileLoggerOptions<ContextKeyName extends string> =
+  BaseLoggerOptions<ContextKeyName> & {
+    file: PathLike;
+  };
 
 /**
  * Combine all loggers into one to become even more powerful muhaha :D
  */
-export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
+export type LoggerOptions<ContextKeyName extends string> =
+  | StreamLoggerOptions<ContextKeyName>
+  | FileLoggerOptions<ContextKeyName>;
 
-type BaseLoggerOptions = PinoLoggerOptions & {
+type BaseLoggerOptions<ContextKeyName extends string> = PinoLoggerOptions & {
   /**
    * Customize the logger name in the request context
    *
@@ -36,7 +40,7 @@ type BaseLoggerOptions = PinoLoggerOptions & {
    *  // ...
    * }).listen(8080);
    */
-  contextKeyName?: string;
+  contextKeyName?: ContextKeyName;
   /**
    * This function will be invoked for each `log`-method called with `context`
    * where you can pass additional properties that need to be logged

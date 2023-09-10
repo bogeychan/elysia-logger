@@ -18,19 +18,25 @@ import type {
 import { formatters, serializers } from './config';
 
 /**
- * The StreamLogger is used to write log entries to a stream such as the console output (default behaviour).
+ * The StreamLogger is used to write log entries to a stream such as the console output (default behavior).
  */
-export const logger = (options: StreamLoggerOptions = {}) => plugin(options);
+export const logger = <ContextKeyName extends string = 'log'>(
+  options: StreamLoggerOptions<ContextKeyName> = {}
+) => plugin(options);
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export const fileLogger = (options: FileLoggerOptions) => plugin(options);
+export const fileLogger = <ContextKeyName extends string = 'log'>(
+  options: FileLoggerOptions<ContextKeyName>
+) => plugin(options);
 
 /**
  * Create a logger instance like the plugin.
  */
-export function createPinoLogger(options: LoggerOptions) {
+export function createPinoLogger<ContextKeyName extends string>(
+  options: LoggerOptions<ContextKeyName>
+) {
   if (!options.level) {
     options.level = 'info';
   }
@@ -43,25 +49,32 @@ export function createPinoLogger(options: LoggerOptions) {
     options.serializers = serializers;
   }
 
-  const streamOptions = options as StreamLoggerOptions;
+  const streamOptions = options as StreamLoggerOptions<ContextKeyName>;
 
   if ('file' in options) {
     streamOptions.stream = pino.destination(options.file);
-    delete (options as Partial<FileLoggerOptions>).file;
+    delete (options as Partial<FileLoggerOptions<ContextKeyName>>).file;
   }
 
   return pino(options, streamOptions.stream!);
 }
 
-function plugin(options: FileLoggerOptions | StreamLoggerOptions) {
+function plugin<ContextKeyName extends string>(
+  options: LoggerOptions<ContextKeyName>
+) {
   if (!options.contextKeyName) {
-    options.contextKeyName = 'log';
+    options.contextKeyName = 'log' as ContextKeyName;
   }
 
   const { contextKeyName, ...loggerOptions } = options;
 
+  type DeriveReturned = {
+    [K in ContextKeyName]: ReturnType<typeof createPinoLogger<ContextKeyName>>;
+  };
+
   return (app: Elysia) =>
-    app.derive((ctx) => {
+    // @ts-ignore
+    app.derive<DeriveReturned>((ctx) => {
       let log = createPinoLogger(loggerOptions);
 
       if (typeof options.customProps === 'function') {
