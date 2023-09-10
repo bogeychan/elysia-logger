@@ -2,7 +2,7 @@
 
 Feature:
 
-- type safety with `contextKeyName`
+- type safety with `contextKeyName` [#2](https://github.com/bogeychan/elysia-logger/issues/2)
 
 # 0.0.5 - 08 Sep 2023
 
