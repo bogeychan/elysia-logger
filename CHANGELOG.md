@@ -1,3 +1,9 @@
+# 0.0.6 - 10 Sep 2023
+
+Feature:
+
+- type safety with `contextKeyName`
+
 # 0.0.5 - 08 Sep 2023
 
 Feature:
