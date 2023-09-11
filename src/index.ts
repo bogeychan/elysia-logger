@@ -35,7 +35,10 @@ export const fileLogger = <ContextKeyName extends string = 'log'>(
  * Create a logger instance like the plugin.
  */
 export function createPinoLogger<ContextKeyName extends string>(
-  options: LoggerOptions<ContextKeyName>
+  options: Omit<
+    LoggerOptions<ContextKeyName>,
+    'customProps' | 'contextKeyName'
+  > = {}
 ) {
   if (!options.level) {
     options.level = 'info';

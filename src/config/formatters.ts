@@ -3,7 +3,7 @@ import type { LoggerOptions } from 'pino';
 
 import { serializeRequest } from './serializers';
 
-export const formatters: LoggerOptions['formatters'] = {
+export const formatters = {
   log(object) {
     if (isContext(object)) {
       const context = object as unknown as Context;
@@ -13,7 +13,7 @@ export const formatters: LoggerOptions['formatters'] = {
     }
     return object;
   }
-};
+} satisfies LoggerOptions['formatters'];
 
 export function isContext(object: unknown) {
   const context = object as Context;
