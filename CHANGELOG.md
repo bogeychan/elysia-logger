@@ -1,3 +1,9 @@
+# 0.0.7 - 11 Sep 2023
+
+Bug fix:
+
+- `createPinoLogger` options
+
 # 0.0.6 - 10 Sep 2023
 
 Feature:

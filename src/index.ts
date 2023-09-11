@@ -55,6 +55,7 @@ export function createPinoLogger<ContextKeyName extends string>(
   const streamOptions = options as StreamLoggerOptions<ContextKeyName>;
 
   if ('file' in options) {
+    // @ts-ignore options.file
     streamOptions.stream = pino.destination(options.file);
     delete (options as Partial<FileLoggerOptions<ContextKeyName>>).file;
   }
