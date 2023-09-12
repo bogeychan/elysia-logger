@@ -109,8 +109,6 @@ const app = new Elysia()
     return 'Hello World';
   })
   .listen(8080);
-
-console.log(`Listening on http://${app.server!.hostname}:${app.server!.port}`);
 ```
 
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.

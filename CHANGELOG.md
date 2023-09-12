@@ -1,3 +1,9 @@
+# 0.0.8 - 12 Sep 2023
+
+Improvement:
+
+- auto completion for `level` option
+
 # 0.0.7 - 11 Sep 2023
 
 Bug fix:
