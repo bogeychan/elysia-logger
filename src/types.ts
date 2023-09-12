@@ -1,7 +1,8 @@
 import type { Context, Elysia, ElysiaInstance } from 'elysia';
 import type {
   DestinationStream,
-  LoggerOptions as PinoLoggerOptions
+  LoggerOptions as PinoLoggerOptions,
+  pino
 } from 'pino';
 
 /**
@@ -27,7 +28,20 @@ export type LoggerOptions<ContextKeyName extends string> =
   | StreamLoggerOptions<ContextKeyName>
   | FileLoggerOptions<ContextKeyName>;
 
-type BaseLoggerOptions<ContextKeyName extends string> = PinoLoggerOptions & {
+type BaseLoggerOptions<ContextKeyName extends string> = Omit<
+  PinoLoggerOptions,
+  'level'
+> & {
+  /**
+   * One of the supported levels or `silent` to disable logging.
+   * Any other value defines a custom level and requires supplying a level value via `levelVal`. Default: 'info'.
+   *
+   * Improved type support:
+   *
+   * @extends PinoLoggerOptions
+   * @see https://github.com/microsoft/TypeScript/issues/29729
+   */
+  level?: pino.LevelWithSilent | (string & {});
   /**
    * Customize the logger name in the request context
    *
