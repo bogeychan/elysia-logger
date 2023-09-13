@@ -34,7 +34,7 @@ export const fileLogger = <ContextKeyName extends string = 'log'>(
 /**
  * Create a logger instance like the plugin.
  */
-export function createPinoLogger<ContextKeyName extends string>(
+export function createPinoLogger<ContextKeyName extends string = string>(
   options: Omit<
     LoggerOptions<ContextKeyName>,
     'customProps' | 'contextKeyName'

@@ -1,16 +1,12 @@
+import type { pino } from 'pino';
 import type { Context, Elysia, ElysiaInstance } from 'elysia';
-import type {
-  DestinationStream,
-  LoggerOptions as PinoLoggerOptions,
-  pino
-} from 'pino';
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
  */
 export type StreamLoggerOptions<ContextKeyName extends string> =
   BaseLoggerOptions<ContextKeyName> & {
-    stream?: DestinationStream;
+    stream?: pino.DestinationStream;
   };
 
 /**
@@ -29,7 +25,7 @@ export type LoggerOptions<ContextKeyName extends string> =
   | FileLoggerOptions<ContextKeyName>;
 
 type BaseLoggerOptions<ContextKeyName extends string> = Omit<
-  PinoLoggerOptions,
+  pino.LoggerOptions,
   'level'
 > & {
   /**
@@ -63,6 +59,8 @@ type BaseLoggerOptions<ContextKeyName extends string> = Omit<
     ctx: ElysiaContextForInstance<Instance>
   ) => object;
 };
+
+export type Logger = pino.Logger;
 
 export type InferElysiaInstance<T> = T extends Elysia<infer _BasePath, infer U>
   ? U
