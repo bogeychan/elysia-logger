@@ -1,3 +1,10 @@
+# 0.0.9 - 13 Sep 2023
+
+Improvement:
+
+- using the new `ElysiaJS` plugin syntax
+- exposing `LoggerOptions` and `Logger` types [#4](https://github.com/bogeychan/elysia-logger/issues/4)
+
 # 0.0.8 - 12 Sep 2023
 
 Improvement:
