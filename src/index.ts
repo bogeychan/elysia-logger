@@ -76,9 +76,11 @@ function plugin<ContextKeyName extends string>(
     [K in ContextKeyName]: ReturnType<typeof createPinoLogger<ContextKeyName>>;
   };
 
-  return (app: Elysia) =>
+  return new Elysia({
+    name: '@bogeychan/elysia-logger'
+  }).derive<DeriveReturned>(
     // @ts-ignore
-    app.derive<DeriveReturned>((ctx) => {
+    (ctx) => {
       let log = createPinoLogger(loggerOptions);
 
       if (typeof options.customProps === 'function') {
@@ -89,7 +91,8 @@ function plugin<ContextKeyName extends string>(
       return {
         [contextKeyName]: log
       };
-    });
+    }
+  );
 }
 
 export * from './config';
