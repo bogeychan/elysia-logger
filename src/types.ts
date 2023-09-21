@@ -1,6 +1,5 @@
 import type { pino } from 'pino';
-import type { Context, DecoratorBase, Elysia, RouteSchema } from 'elysia';
-import { Prettify } from 'elysia/types';
+import type { Context, DecoratorBase, Elysia } from 'elysia';
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
