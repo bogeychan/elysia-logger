@@ -1,6 +1,8 @@
 # @bogeychan/elysia-logger
 
-A plugin for [Elysia.js](https://elysiajs.com) for logging using the [pino](https://getpino.io) library
+A plugin for [Elysia.js](https://elysiajs.com) for logging using the [pino](https://getpino.io) library.
+
+## [Migration guide](./MIGRATION.md)
 
 ## Installation
 

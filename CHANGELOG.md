@@ -1,3 +1,20 @@
+# 0.0.10 - 21 Sep 2023
+
+Improvement:
+
+- added [Migration guide](./MIGRATION.md)
+
+Bug fix:
+
+- update to elysia 0.7.6 [#5](https://github.com/bogeychan/elysia-logger/issues/5)
+
+Breaking Change:
+
+- removed the `contextKeyName` option
+- updated typing to infer the elysia context
+
+  For more details checkout the [migration guide](./MIGRATION.md)
+
 # 0.0.9 - 13 Sep 2023
 
 Improvement:
