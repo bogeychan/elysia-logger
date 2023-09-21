@@ -9,4 +9,5 @@ tsconfig.json
 examples
 tests
 CHANGELOG.md
+MIGRATION.md
 tsconfig.esm.json
