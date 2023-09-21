@@ -1,20 +1,17 @@
 import { Elysia } from 'elysia';
 
 import {
-  ElysiaContextForInstance,
-  InferElysiaInstance,
+  type InferContext,
   createPinoLogger,
   formatters,
   isContext
-} from '../src/index';
+} from '../src';
 
 const myPlugin = () => (app: Elysia) => app.decorate('myProperty', 42);
 
 const app = new Elysia().use(myPlugin());
 
-type MyElysiaContext = ElysiaContextForInstance<
-  InferElysiaInstance<typeof app>
->;
+type MyElysiaContext = InferContext<typeof app>;
 
 const log = createPinoLogger({
   // this is an alternative to `customProps`

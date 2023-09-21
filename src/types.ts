@@ -1,33 +1,27 @@
 import type { pino } from 'pino';
-import type { Context, Elysia, ElysiaInstance } from 'elysia';
+import type { Context, DecoratorBase, Elysia, RouteSchema } from 'elysia';
+import { Prettify } from 'elysia/types';
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
  */
-export type StreamLoggerOptions<ContextKeyName extends string> =
-  BaseLoggerOptions<ContextKeyName> & {
-    stream?: pino.DestinationStream;
-  };
+export type StreamLoggerOptions = BaseLoggerOptions & {
+  stream?: pino.DestinationStream;
+};
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export type FileLoggerOptions<ContextKeyName extends string> =
-  BaseLoggerOptions<ContextKeyName> & {
-    file: PathLike;
-  };
+export type FileLoggerOptions = BaseLoggerOptions & {
+  file: PathLike;
+};
 
 /**
  * Combine all loggers into one to become even more powerful muhaha :D
  */
-export type LoggerOptions<ContextKeyName extends string> =
-  | StreamLoggerOptions<ContextKeyName>
-  | FileLoggerOptions<ContextKeyName>;
+export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
 
-type BaseLoggerOptions<ContextKeyName extends string> = Omit<
-  pino.LoggerOptions,
-  'level'
-> & {
+type BaseLoggerOptions = Omit<pino.LoggerOptions, 'level'> & {
   /**
    * One of the supported levels or `silent` to disable logging.
    * Any other value defines a custom level and requires supplying a level value via `levelVal`. Default: 'info'.
@@ -39,36 +33,23 @@ type BaseLoggerOptions<ContextKeyName extends string> = Omit<
    */
   level?: pino.LevelWithSilent | (string & {});
   /**
-   * Customize the logger name in the request context
-   *
-   * @example
-   * const app = new Elysia()
-   * .use(logger({ contextKeyName: 'myLogger' }))
-   * .get('/', (ctx) => {
-   * // property "myLogger" is available instead of "log"
-   *  ctx.myLogger.info(ctx.request, 'Request');
-   *  // ...
-   * }).listen(8080);
-   */
-  contextKeyName?: ContextKeyName;
-  /**
    * This function will be invoked for each `log`-method called with `context`
    * where you can pass additional properties that need to be logged
    */
-  customProps?: <Instance extends ElysiaInstance>(
-    ctx: ElysiaContextForInstance<Instance>
+  customProps?: <Instance extends Elysia>(
+    ctx: InferContext<Instance>
   ) => object;
 };
 
 export type Logger = pino.Logger;
 
-export type InferElysiaInstance<T> = T extends Elysia<infer _BasePath, infer U>
-  ? U
+export type InferContext<T extends Elysia> = T extends Elysia<
+  infer Path,
+  infer Decorators,
+  infer _Definitions,
+  infer _ParentSchema,
+  infer Routes
+>
+  ? Context<Routes, DecoratorBase, Path> & Partial<Decorators['request']>
   : never;
-
-export type ElysiaContextForInstance<Instance extends ElysiaInstance> = Context<
-  Instance['schema'],
-  Instance['store']
-> &
-  Partial<Instance['request']>;
 

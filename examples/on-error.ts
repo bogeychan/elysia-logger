@@ -1,6 +1,6 @@
 import { Elysia } from 'elysia';
 
-import { createPinoLogger } from '../src/index';
+import { createPinoLogger } from '../src';
 
 const log = createPinoLogger();
 

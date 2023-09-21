@@ -54,7 +54,7 @@ logger({
 ### Include additional request context info for debugging tools
 
 ```ts
-import { logger } from '@bogeychan/elysia-logger';
+import { logger, type InferContext } from '@bogeychan/elysia-logger';
 
 const myPlugin = () => (app: Elysia) => app.decorate('myProperty', 42);
 
@@ -69,9 +69,7 @@ app
        * This function will be invoked for each `log`-method called with `context`
        * where you can pass additional properties that need to be logged
        */
-      customProps(
-        ctx: ElysiaContextForInstance<InferElysiaInstance<typeof app>>
-      ) {
+      customProps(ctx: InferContext<typeof app>) {
         return {
           params: ctx.params,
           query: ctx.query,
@@ -92,16 +90,14 @@ You can find the entire example in the [examples](./examples/with-context) folde
 
 ### Customize the logger name in the request context
 
+You can learn more about this in the [Elysia's 0.7 blog](https://elysiajs.com/blog/elysia-07.html)
+
 ```ts
 import { Elysia } from 'elysia';
 import { logger } from '@bogeychan/elysia-logger';
 
 const app = new Elysia()
-  .use(
-    logger({
-      contextKeyName: 'myLogger'
-    })
-  )
+  .use(logger().decorate(({ log, ...rest }) => ({ myLogger: log, ...rest })))
   .get('/', (ctx) => {
     // property "myLogger" is available instead of "log"
     ctx.myLogger.info(ctx.request, 'Request');

@@ -20,25 +20,18 @@ import { formatters, serializers } from './config';
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output (default behavior).
  */
-export const logger = <ContextKeyName extends string = 'log'>(
-  options: StreamLoggerOptions<ContextKeyName> = {}
-) => plugin(options);
+export const logger = (options: StreamLoggerOptions = {}) => plugin(options);
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export const fileLogger = <ContextKeyName extends string = 'log'>(
-  options: FileLoggerOptions<ContextKeyName>
-) => plugin(options);
+export const fileLogger = (options: FileLoggerOptions) => plugin(options);
 
 /**
  * Create a logger instance like the plugin.
  */
-export function createPinoLogger<ContextKeyName extends string = string>(
-  options: Omit<
-    LoggerOptions<ContextKeyName>,
-    'customProps' | 'contextKeyName'
-  > = {}
+export function createPinoLogger(
+  options: Omit<LoggerOptions, 'customProps'> = {}
 ) {
   if (!options.level) {
     options.level = 'info';
@@ -52,50 +45,33 @@ export function createPinoLogger<ContextKeyName extends string = string>(
     options.serializers = serializers;
   }
 
-  const streamOptions = options as StreamLoggerOptions<ContextKeyName>;
+  const streamOptions = options as StreamLoggerOptions;
 
   if ('file' in options) {
     // @ts-ignore options.file
     streamOptions.stream = pino.destination(options.file);
-    delete (options as Partial<FileLoggerOptions<ContextKeyName>>).file;
+    delete (options as Partial<FileLoggerOptions>).file;
   }
 
   return pino(options, streamOptions.stream!);
 }
 
-function plugin<ContextKeyName extends string>(
-  options: LoggerOptions<ContextKeyName>
-) {
-  if (!options.contextKeyName) {
-    options.contextKeyName = 'log' as ContextKeyName;
-  }
-
-  const { contextKeyName, ...loggerOptions } = options;
-
-  type DeriveReturned = {
-    [K in ContextKeyName]: ReturnType<typeof createPinoLogger<ContextKeyName>>;
-  };
-
+function plugin(options: LoggerOptions) {
   return new Elysia({
     name: '@bogeychan/elysia-logger'
-  }).derive<DeriveReturned>(
-    // @ts-ignore
-    (ctx) => {
-      let log = createPinoLogger(loggerOptions);
+  }).derive((ctx) => {
+    let log = createPinoLogger(options);
 
-      if (typeof options.customProps === 'function') {
-        // @ts-ignore
-        log = log.child(options.customProps(ctx));
-      }
-
-      return {
-        [contextKeyName]: log
-      };
+    if (typeof options.customProps === 'function') {
+      // @ts-ignore
+      log = log.child(options.customProps(ctx));
     }
-  );
+
+    return { log };
+  });
 }
 
 export * from './config';
 
-export type { ElysiaContextForInstance, InferElysiaInstance } from './types';
+export type { InferContext } from './types';
 
