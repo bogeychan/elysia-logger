@@ -88,27 +88,6 @@ app
   .listen(8080);
 ```
 
-You can find the entire example in the [examples](./examples/with-context) folder.
-
-### Customize the logger name in the request context
-
-You can learn more about this in the [Elysia's 0.7 blog](https://elysiajs.com/blog/elysia-07.html)
-
-```ts
-import { Elysia } from 'elysia';
-import { logger } from '@bogeychan/elysia-logger';
-
-const app = new Elysia()
-  .use(logger().decorate(({ log, ...rest }) => ({ myLogger: log, ...rest })))
-  .get('/', (ctx) => {
-    // property "myLogger" is available instead of "log"
-    ctx.myLogger.info(ctx.request, 'Request');
-
-    return 'Hello World';
-  })
-  .listen(8080);
-```
-
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.
 
 ## Author
