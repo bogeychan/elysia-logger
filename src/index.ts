@@ -60,7 +60,7 @@ function plugin(options: LoggerOptions, pinoLoggerOverride: Logger<Omit<LoggerOp
   return new Elysia({
     name: '@bogeychan/elysia-logger'
   }).derive((ctx) => {
-    let log = createPinoLogger(options);
+    let log = pinoLoggerOverride ?? createPinoLogger(options);
 
     if (typeof options.customProps === 'function') {
       // @ts-ignore
