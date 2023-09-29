@@ -56,11 +56,11 @@ export function createPinoLogger(
   return pino(options, streamOptions.stream!);
 }
 
-function plugin(options: LoggerOptions) {
+function plugin(options: LoggerOptions, pinoLoggerOverride: Logger<Omit<LoggerOptions, "customProps">> = null) {
   return new Elysia({
     name: '@bogeychan/elysia-logger'
   }).derive((ctx) => {
-    let log = createPinoLogger(options);
+    let log = pinoLoggerOverride ?? createPinoLogger(options);
 
     if (typeof options.customProps === 'function') {
       // @ts-ignore
