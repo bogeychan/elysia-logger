@@ -1,4 +1,4 @@
-import pino from 'pino';
+import pino, { Logger } from 'pino';
 import Elysia from 'elysia';
 
 import type {
@@ -56,11 +56,11 @@ export function createPinoLogger(
   return pino(options, streamOptions.stream!);
 }
 
-function plugin(options: LoggerOptions, pinoLoggerOverride: Logger<Omit<LoggerOptions, "customProps">> = null) {
+function plugin(options: LoggerOptions, pinoLoggerOverride: Logger<Omit<LoggerOptions, "customProps">> | null = null) {
   return new Elysia({
     name: '@bogeychan/elysia-logger'
   }).derive((ctx) => {
-    let log = pinoLoggerOverride ?? createPinoLogger(options);
+    let log = createPinoLogger(options);
 
     if (typeof options.customProps === 'function') {
       // @ts-ignore
