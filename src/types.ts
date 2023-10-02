@@ -20,6 +20,30 @@ export type FileLoggerOptions = BaseLoggerOptions & {
  */
 export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
 
+export type ElysiaLoggerOptions = Pick<BaseLoggerOptions, 'customProps'>;
+
+export type StandaloneLoggerOptions = Omit<LoggerOptions, 'customProps'>;
+
+export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
+  /**
+   * Call `into` to use the logger instance in both `ctx` and standalone
+   *
+   * @example
+   * const log = createPinoLogger(...);
+   * app
+   *  .use(log.into())
+   *  .onError((ctx) => {
+   *     log.error(ctx, ctx.error.name);
+   *     return 'onError';
+   *  })
+   *  .get('/', (ctx) => {
+   *     ctx.log.info(ctx, 'Context');
+   *     throw { message: '1234', name: 'MyError' };
+   *  })
+   */
+  into(options?: ElysiaLoggerOptions): E;
+}
+
 type BaseLoggerOptions = Omit<pino.LoggerOptions, 'level'> & {
   /**
    * One of the supported levels or `silent` to disable logging.
@@ -40,7 +64,7 @@ type BaseLoggerOptions = Omit<pino.LoggerOptions, 'level'> & {
   ) => object;
 };
 
-export type Logger = pino.Logger;
+export type Logger<Options = StandaloneLoggerOptions> = pino.Logger<Options>;
 
 export type InferContext<T extends Elysia> = T extends Elysia<
   infer Path,

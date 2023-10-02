@@ -31,12 +31,13 @@ const log = createPinoLogger({
 });
 
 app
+  .use(log.into()) // Call `into` to use the logger instance in both `ctx` and standalone
   .onError((ctx) => {
     log.error(ctx, ctx.error.name);
     return 'onError';
   })
   .get('/', (ctx) => {
-    log.info(ctx, 'Context');
+    ctx.log.info(ctx, 'Context');
 
     throw { message: '1234', name: 'MyError' };
   })
