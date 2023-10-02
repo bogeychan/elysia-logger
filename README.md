@@ -84,8 +84,27 @@ app
     ctx.log.info(ctx, 'Context');
 
     return 'with-context';
+  });
+```
+
+### Use the logger instance both `Standalone` and inside `Context`
+
+```ts
+import { createPinoLogger } from '@bogeychan/elysia-logger';
+
+const log = createPinoLogger(/* ... */);
+
+app
+  .use(log.into(/* ... */))
+  .onError((ctx) => {
+    log.error(ctx, ctx.error.name);
+    return 'onError';
   })
-  .listen(8080);
+  .get('/', (ctx) => {
+    ctx.log.info(ctx, 'Context');
+
+    throw { message: '1234', name: 'MyError' };
+  });
 ```
 
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.

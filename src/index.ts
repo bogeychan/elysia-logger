@@ -2,9 +2,13 @@ import pino from 'pino';
 import Elysia from 'elysia';
 
 import type {
+  Logger,
+  ElysiaLogger,
   LoggerOptions,
   FileLoggerOptions,
-  StreamLoggerOptions
+  StreamLoggerOptions,
+  ElysiaLoggerOptions,
+  StandaloneLoggerOptions
 } from './types';
 
 /**
@@ -31,8 +35,14 @@ export const fileLogger = (options: FileLoggerOptions) => plugin(options);
  * Create a logger instance like the plugin.
  */
 export function createPinoLogger(
-  options: Omit<LoggerOptions, 'customProps'> = {}
-) {
+  options: StandaloneLoggerOptions = {}
+): ElysiaLogger<ReturnType<typeof into>> {
+  const log = createPinoLoggerInternal(options);
+  (log as unknown as ElysiaLogger).into = into.bind(log);
+  return log as unknown as ElysiaLogger<ReturnType<typeof into>>;
+}
+
+function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
   if (!options.level) {
     options.level = 'info';
   }
@@ -48,7 +58,6 @@ export function createPinoLogger(
   const streamOptions = options as StreamLoggerOptions;
 
   if ('file' in options) {
-    // @ts-ignore options.file
     streamOptions.stream = pino.destination(options.file);
     delete (options as Partial<FileLoggerOptions>).file;
   }
@@ -56,20 +65,19 @@ export function createPinoLogger(
   return pino(options, streamOptions.stream!);
 }
 
-function plugin(options: LoggerOptions) {
+function into(this: Logger, options: ElysiaLoggerOptions = {}) {
   return new Elysia({
     name: '@bogeychan/elysia-logger'
-  }).derive((ctx) => {
-    let log = createPinoLogger(options);
-
-    if (typeof options.customProps === 'function') {
-      // @ts-ignore
-      log = log.child(options.customProps(ctx));
-    }
-
-    return { log };
-  });
+  }).derive((ctx) => ({
+    log:
+      typeof options.customProps === 'function'
+        ? this.child(options.customProps(ctx))
+        : this
+  }));
 }
+
+const plugin = (options: LoggerOptions) =>
+  into.bind(createPinoLoggerInternal(options))(options);
 
 export * from './config';
 
