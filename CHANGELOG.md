@@ -1,3 +1,9 @@
+# 0.0.11 - 02 Oct 2023
+
+Feature:
+
+- injecting logger as dependency [#7](https://github.com/bogeychan/elysia-logger/pull/7)
+
 # 0.0.10 - 21 Sep 2023
 
 Improvement:
