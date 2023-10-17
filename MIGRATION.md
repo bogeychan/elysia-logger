@@ -1,5 +1,41 @@
 # Migration Guide
 
+## v0.0.11 to v0.0.12
+
+### Automatic `onResponse` logging by `default`
+
+Use:
+
+```ts
+import { logger, createPinoLogger } from '@bogeychan/elysia-logger';
+
+app.use(
+  logger({
+    autoLogging: false
+  })
+);
+
+const log = createPinoLogger();
+
+app.use(
+  log.into({
+    autoLogging: false
+  })
+);
+```
+
+Instead of:
+
+```ts
+import { logger, createPinoLogger } from '@bogeychan/elysia-logger';
+
+app.use(logger());
+
+const log = createPinoLogger();
+
+app.use(log.into());
+```
+
 ## v0.0.9 to v0.0.10
 
 ### Infer the Elysia Context

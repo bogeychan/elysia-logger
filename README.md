@@ -107,6 +107,26 @@ app
   });
 ```
 
+### Automatic `onResponse` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http)
+
+```ts
+import { logger } from '@bogeychan/elysia-logger';
+
+app
+  .use(
+    logger({
+      autoLogging: true // default
+      autoLogging: false // disabled
+      autoLogging: {
+        ignore(ctx) {
+          return true // ignore logging for all requests
+        }
+      }
+    })
+  )
+  .get('/', (ctx) => 'autoLogging');
+```
+
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.
 
 ## Author

@@ -1,3 +1,11 @@
+# 0.0.12 - 18 Oct 2023
+
+Breaking Change:
+
+- automatic `onResponse` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http); [#6](https://github.com/bogeychan/elysia-logger/issues/6)
+
+  For more details checkout the [migration guide](./MIGRATION.md)
+
 # 0.0.11 - 02 Oct 2023
 
 Feature:
