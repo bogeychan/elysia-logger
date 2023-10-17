@@ -115,11 +115,11 @@ import { logger } from '@bogeychan/elysia-logger';
 app
   .use(
     logger({
-      autoLogging: true // default
-      autoLogging: false // disabled
+      autoLogging: true, // default
+      autoLogging: false, // disabled
       autoLogging: {
         ignore(ctx) {
-          return true // ignore logging for all requests
+          return true; // ignore logging for requests based on condition
         }
       }
     })
@@ -128,10 +128,6 @@ app
 ```
 
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.
-
-## Author
-
-[bogeychan](https://github.com/bogeychan)
 
 ## License
 
