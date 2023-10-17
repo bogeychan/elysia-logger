@@ -47,6 +47,12 @@ export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
    *     throw { message: '1234', name: 'MyError' };
    *  })
    */
+  into(
+    options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<ElysiaLoggerOptions>
+  ): _INTERNAL_ElysiaLoggerPlugin<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>;
+  into(
+    options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<ElysiaLoggerOptions>
+  ): _INTERNAL_ElysiaLoggerPlugin;
   into(options?: ElysiaLoggerOptions): E;
 }
 
