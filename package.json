@@ -27,7 +27,7 @@
   },
   "types": "./src/index.ts",
   "scripts": {
-    "dev": "bun run --watch examples/pino-pretty/index.ts",
+    "dev": "bun run --watch examples/basic.ts",
     "test": "bun test",
     "build": "rm -fr dist && tsc --project tsconfig.esm.json",
     "release": "npm run build && npm run test && npm publish --access public"
@@ -36,7 +36,7 @@
     "elysia": ">= 0.7.6"
   },
   "devDependencies": {
-    "bun-types": "^1.0.2",
+    "bun-types": "^1.0.6",
     "elysia": "^0.7.6",
     "typescript": "^5.2.2"
   },

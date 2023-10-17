@@ -20,9 +20,15 @@ export type FileLoggerOptions = BaseLoggerOptions & {
  */
 export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
 
-export type ElysiaLoggerOptions = Pick<BaseLoggerOptions, 'customProps'>;
+export type ElysiaLoggerOptions = Pick<
+  BaseLoggerOptions,
+  'customProps' | 'autoLogging'
+>;
 
-export type StandaloneLoggerOptions = Omit<LoggerOptions, 'customProps'>;
+export type StandaloneLoggerOptions = Omit<
+  LoggerOptions,
+  'customProps' | 'autoLogging'
+>;
 
 export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
   /**
@@ -62,6 +68,12 @@ type BaseLoggerOptions = Omit<pino.LoggerOptions, 'level'> & {
   customProps?: <Instance extends Elysia>(
     ctx: InferContext<Instance>
   ) => object;
+  /**
+   * Disable the automatic "onResponse" logging
+   *
+   * @default true
+   */
+  autoLogging?: boolean | { ignore: (ctx: Context) => boolean };
 };
 
 export type Logger<Options = StandaloneLoggerOptions> = pino.Logger<Options>;
@@ -75,4 +87,41 @@ export type InferContext<T extends Elysia> = T extends Elysia<
 >
   ? Context<Routes, DecoratorBase, Path> & Partial<Decorators['request']>
   : never;
+
+/**
+ * Make all properties in T NOT readonly
+ *
+ * based on @see Readonly
+ */
+export type _INTERNAL_Writeonly<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+export type _INTERNAL_ElysiaLoggerPluginAutoLoggingState = {
+  readonly startTime?: number;
+  readonly endTime?: number;
+  readonly responseTime?: number;
+};
+
+export type _INTERNAL_ElysiaLoggerPlugin<
+  Store extends Elysia['store'] = Elysia['store']
+> = Elysia<
+  '',
+  {
+    request: {
+      log: Logger;
+    };
+    store: Store;
+  }
+>;
+
+export type _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<
+  Options extends BaseLoggerOptions
+> = Omit<Options, 'autoLogging'> & {
+  autoLogging?: true | { ignore: (ctx: Context) => boolean };
+};
+
+export type _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<
+  Options extends BaseLoggerOptions
+> = Omit<Options, 'autoLogging'> & { autoLogging: false };
 

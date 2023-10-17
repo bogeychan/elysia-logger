@@ -8,7 +8,12 @@ import type {
   FileLoggerOptions,
   StreamLoggerOptions,
   ElysiaLoggerOptions,
-  StandaloneLoggerOptions
+  StandaloneLoggerOptions,
+  _INTERNAL_Writeonly,
+  _INTERNAL_ElysiaLoggerPlugin,
+  _INTERNAL_ElysiaLoggerPluginAutoLoggingState,
+  _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions,
+  _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions
 } from './types';
 
 /**
@@ -24,12 +29,28 @@ import { formatters, serializers } from './config';
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output (default behavior).
  */
-export const logger = (options: StreamLoggerOptions = {}) => plugin(options);
+export function logger(
+  options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<StreamLoggerOptions>
+): _INTERNAL_ElysiaLoggerPlugin<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>;
+export function logger(
+  options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<StreamLoggerOptions>
+): _INTERNAL_ElysiaLoggerPlugin;
+export function logger(options: StreamLoggerOptions = {}) {
+  return plugin(options);
+}
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export const fileLogger = (options: FileLoggerOptions) => plugin(options);
+export function fileLogger(
+  options: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<FileLoggerOptions>
+): _INTERNAL_ElysiaLoggerPlugin<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>;
+export function fileLogger(
+  options: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<FileLoggerOptions>
+): _INTERNAL_ElysiaLoggerPlugin;
+export function fileLogger(options: FileLoggerOptions) {
+  return plugin(options);
+}
 
 /**
  * Create a logger instance like the plugin.
@@ -43,17 +64,9 @@ export function createPinoLogger(
 }
 
 function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
-  if (!options.level) {
-    options.level = 'info';
-  }
-
-  if (!options.formatters) {
-    options.formatters = formatters;
-  }
-
-  if (!options.serializers) {
-    options.serializers = serializers;
-  }
+  options.level ??= 'info';
+  options.formatters ??= formatters;
+  options.serializers ??= serializers;
 
   const streamOptions = options as StreamLoggerOptions;
 
@@ -66,7 +79,11 @@ function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
 }
 
 function into(this: Logger, options: ElysiaLoggerOptions = {}) {
-  return new Elysia({
+  const autoLogging = options.autoLogging ?? true;
+
+  delete options.autoLogging;
+
+  let app = new Elysia({
     name: '@bogeychan/elysia-logger'
   }).derive((ctx) => ({
     log:
@@ -74,6 +91,39 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ? this.child(options.customProps(ctx))
         : this
   }));
+
+  if (autoLogging) {
+    app = (
+      app as _INTERNAL_ElysiaLoggerPlugin<
+        _INTERNAL_Writeonly<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>
+      >
+    )
+      .onRequest((ctx) => {
+        ctx.store = { ...ctx.store, startTime: performance.now() };
+      })
+      .onResponse((ctx) => {
+        if (ctx.log.level == 'silent') {
+          return;
+        }
+
+        if (typeof autoLogging == 'object' && autoLogging.ignore(ctx)) {
+          return;
+        }
+
+        ctx.store.startTime ??= 0;
+        ctx.store.endTime = performance.now();
+        ctx.store.responseTime = ctx.store.endTime - ctx.store.startTime;
+
+        ctx.log.info(ctx);
+      });
+    // ! ctx.log is undefined or onError called twice for custom error...
+    // ? tested on elysia@0.7.17
+    // .onError((ctx) => {
+    //   ctx.log.error(ctx);
+    // });
+  }
+
+  return app;
 }
 
 const plugin = (options: LoggerOptions) =>
