@@ -81,7 +81,7 @@ Use:
 
 ```ts
 app
-  .use(logger().decorate(({ log, ...rest }) => ({ myLogger: log, ...rest })))
+  .use(logger().derive(({ log, ...rest }) => ({ myLogger: log, ...rest })))
   .get('/', (ctx) => {
     ctx.myLogger.info(ctx.request, 'Request');
   });
