@@ -138,3 +138,5 @@ export * from './config';
 
 export type { InferContext } from './types';
 
+export { pino } from 'pino';
+
