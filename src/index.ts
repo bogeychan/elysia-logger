@@ -83,14 +83,19 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
 
   delete options.autoLogging;
 
+  let log: Logger;
+
   let app = new Elysia({
-    name: '@bogeychan/elysia-logger'
-  }).derive((ctx) => ({
-    log:
+    name: '@bogeychan/elysia-logger',
+    seed: options
+  }).derive((ctx) => {
+    log =
       typeof options.customProps === 'function'
         ? this.child(options.customProps(ctx))
-        : this
-  }));
+        : this;
+
+    return { log };
+  });
 
   if (autoLogging) {
     app = (
@@ -102,7 +107,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
       .onResponse((ctx) => {
-        if (ctx.log.level == 'silent') {
+        if (log.level == 'silent') {
           return;
         }
 
@@ -114,12 +119,12 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store.endTime = performance.now();
         ctx.store.responseTime = ctx.store.endTime - ctx.store.startTime;
 
-        ctx.log.info(ctx);
+        log.info(ctx);
       });
-    // ! ctx.log is undefined or onError called twice for custom error...
+    // ! log is undefined or onError called twice for custom error...
     // ? tested on elysia@0.7.17
     // .onError((ctx) => {
-    //   ctx.log.error(ctx);
+    //   log.error(ctx);
     // });
   }
 
