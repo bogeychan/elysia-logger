@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import { logger, fileLogger } from '../src';
 
+// use multiple `log` instances simultaneously
 const app = new Elysia()
   .use(
     fileLogger({
