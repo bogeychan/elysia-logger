@@ -1,3 +1,13 @@
+# 0.0.13 - 06 Nov 2023
+
+Feature:
+
+- export `pino`
+
+Bug fix:
+
+- allow using `fileLogger()` and `logger()` at the same time [#10](https://github.com/bogeychan/elysia-logger/issues/10)
+
 # 0.0.12 - 18 Oct 2023
 
 Breaking Change:

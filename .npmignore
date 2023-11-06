@@ -2,6 +2,7 @@
 .gitignore
 .env
 bun.lockb
+out.log
 
 node_modules
 tsconfig.json
