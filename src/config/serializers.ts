@@ -9,6 +9,7 @@ export function serializeRequest(request: Request) {
   return {
     method: request.method,
     url: request.url,
-    referrer: request.referrer
+    referrer: request.headers.get('Referer')
   };
 }
+

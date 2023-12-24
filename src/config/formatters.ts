@@ -9,7 +9,12 @@ export const formatters = {
     if (isContext(object)) {
       const context = object as unknown as Context<
         {},
-        { request: {}; store: _INTERNAL_ElysiaLoggerPluginAutoLoggingState }
+        {
+          request: {};
+          store: _INTERNAL_ElysiaLoggerPluginAutoLoggingState;
+          derive: {};
+          resolve: {};
+        }
       >;
 
       const log: Record<string, any> = {

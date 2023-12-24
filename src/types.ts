@@ -1,5 +1,6 @@
 import type { pino } from 'pino';
 import type { Context, DecoratorBase, Elysia } from 'elysia';
+import type { PathLike } from 'bun';
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
@@ -56,17 +57,7 @@ export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
   into(options?: ElysiaLoggerOptions): E;
 }
 
-type BaseLoggerOptions = Omit<pino.LoggerOptions, 'level'> & {
-  /**
-   * One of the supported levels or `silent` to disable logging.
-   * Any other value defines a custom level and requires supplying a level value via `levelVal`. Default: 'info'.
-   *
-   * Improved type support:
-   *
-   * @extends PinoLoggerOptions
-   * @see https://github.com/microsoft/TypeScript/issues/29729
-   */
-  level?: pino.LevelWithSilent | (string & {});
+type BaseLoggerOptions = pino.LoggerOptions & {
   /**
    * This function will be invoked for each `log`-method called with `context`
    * where you can pass additional properties that need to be logged
@@ -82,7 +73,7 @@ type BaseLoggerOptions = Omit<pino.LoggerOptions, 'level'> & {
   autoLogging?: boolean | { ignore: (ctx: Context) => boolean };
 };
 
-export type Logger<Options = StandaloneLoggerOptions> = pino.Logger<Options>;
+export type Logger<Options = StandaloneLoggerOptions> = pino.Logger & Options;
 
 export type InferContext<T extends Elysia> = T extends Elysia<
   infer Path,
@@ -114,10 +105,10 @@ export type _INTERNAL_ElysiaLoggerPlugin<
 > = Elysia<
   '',
   {
-    request: {
-      log: Logger;
-    };
+    request: {};
     store: Store;
+    derive: { log: Logger };
+    resolve: {};
   }
 >;
 

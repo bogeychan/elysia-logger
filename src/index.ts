@@ -71,6 +71,7 @@ function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
   const streamOptions = options as StreamLoggerOptions;
 
   if ('file' in options) {
+    // @ts-expect-error
     streamOptions.stream = pino.destination(options.file);
     delete (options as Partial<FileLoggerOptions>).file;
   }
