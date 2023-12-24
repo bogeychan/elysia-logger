@@ -1,3 +1,9 @@
+# 0.0.14 - 24 Dec 2023
+
+Bug fix:
+
+- update `elysia` and `pino`
+
 # 0.0.13 - 06 Nov 2023
 
 Feature:
