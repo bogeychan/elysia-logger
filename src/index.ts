@@ -1,5 +1,5 @@
 import pino from 'pino';
-import Elysia from 'elysia';
+import { Elysia } from 'elysia';
 
 import type {
   Logger,
