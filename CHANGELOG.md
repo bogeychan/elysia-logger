@@ -1,3 +1,9 @@
+# 0.0.15 - 06 Jan 2024
+
+Bug fix:
+
+- replace default `elysia` import with named import [#12](https://github.com/bogeychan/elysia-logger/pull/12)
+
 # 0.0.14 - 24 Dec 2023
 
 Bug fix:
