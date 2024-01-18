@@ -1,6 +1,5 @@
 import type { pino } from 'pino';
 import type { Context, DecoratorBase, Elysia } from 'elysia';
-import type { PathLike } from 'bun';
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
@@ -16,7 +15,7 @@ export interface ElysiaStreamLoggerOptions
  * A FileLogger lets you store log entries in a file.
  */
 export interface FileLoggerOptions extends BaseLoggerOptions {
-  file: PathLike;
+  file: string | number | pino.DestinationStream | NodeJS.WritableStream;
 }
 export interface ElysiaFileLoggerOptions
   extends FileLoggerOptions,
