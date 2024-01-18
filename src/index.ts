@@ -9,6 +9,8 @@ import type {
   StreamLoggerOptions,
   ElysiaLoggerOptions,
   StandaloneLoggerOptions,
+  ElysiaFileLoggerOptions,
+  ElysiaStreamLoggerOptions,
   _INTERNAL_Writeonly,
   _INTERNAL_ElysiaLoggerPlugin,
   _INTERNAL_ElysiaLoggerPluginAutoLoggingState,
@@ -30,12 +32,12 @@ import { formatters, serializers } from './config';
  * The StreamLogger is used to write log entries to a stream such as the console output (default behavior).
  */
 export function logger(
-  options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<StreamLoggerOptions>
+  options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<ElysiaStreamLoggerOptions>
 ): _INTERNAL_ElysiaLoggerPlugin<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>;
 export function logger(
-  options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<StreamLoggerOptions>
+  options?: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<ElysiaStreamLoggerOptions>
 ): _INTERNAL_ElysiaLoggerPlugin;
-export function logger(options: StreamLoggerOptions = {}) {
+export function logger(options: ElysiaStreamLoggerOptions = {}) {
   return plugin(options);
 }
 
@@ -43,12 +45,12 @@ export function logger(options: StreamLoggerOptions = {}) {
  * A FileLogger lets you store log entries in a file.
  */
 export function fileLogger(
-  options: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<FileLoggerOptions>
+  options: _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<ElysiaFileLoggerOptions>
 ): _INTERNAL_ElysiaLoggerPlugin<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>;
 export function fileLogger(
-  options: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<FileLoggerOptions>
+  options: _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<ElysiaFileLoggerOptions>
 ): _INTERNAL_ElysiaLoggerPlugin;
-export function fileLogger(options: FileLoggerOptions) {
+export function fileLogger(options: ElysiaFileLoggerOptions) {
   return plugin(options);
 }
 

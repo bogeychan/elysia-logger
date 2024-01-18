@@ -5,31 +5,42 @@ import type { PathLike } from 'bun';
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
  */
-export type StreamLoggerOptions = BaseLoggerOptions & {
+export interface StreamLoggerOptions extends BaseLoggerOptions {
   stream?: pino.DestinationStream;
-};
+}
+export interface ElysiaStreamLoggerOptions
+  extends StreamLoggerOptions,
+    ElysiaLoggerOptions {}
 
 /**
  * A FileLogger lets you store log entries in a file.
  */
-export type FileLoggerOptions = BaseLoggerOptions & {
+export interface FileLoggerOptions extends BaseLoggerOptions {
   file: PathLike;
+}
+export interface ElysiaFileLoggerOptions
+  extends FileLoggerOptions,
+    ElysiaLoggerOptions {}
+
+export type StandaloneLoggerOptions = StreamLoggerOptions | FileLoggerOptions;
+
+export type LoggerOptions = StandaloneLoggerOptions & ElysiaLoggerOptions;
+
+export type ElysiaLoggerOptions = {
+  /**
+   * This function will be invoked for each `log`-method called with `context`
+   * where you can pass additional properties that need to be logged
+   */
+  customProps?: <Instance extends Elysia>(
+    ctx: InferContext<Instance>
+  ) => object;
+  /**
+   * Disable the automatic "onResponse" logging
+   *
+   * @default true
+   */
+  autoLogging?: boolean | { ignore: (ctx: Context) => boolean };
 };
-
-/**
- * Combine all loggers into one to become even more powerful muhaha :D
- */
-export type LoggerOptions = StreamLoggerOptions | FileLoggerOptions;
-
-export type ElysiaLoggerOptions = Pick<
-  BaseLoggerOptions,
-  'customProps' | 'autoLogging'
->;
-
-export type StandaloneLoggerOptions = Omit<
-  LoggerOptions,
-  'customProps' | 'autoLogging'
->;
 
 export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
   /**
@@ -57,23 +68,9 @@ export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
   into(options?: ElysiaLoggerOptions): E;
 }
 
-type BaseLoggerOptions = pino.LoggerOptions & {
-  /**
-   * This function will be invoked for each `log`-method called with `context`
-   * where you can pass additional properties that need to be logged
-   */
-  customProps?: <Instance extends Elysia>(
-    ctx: InferContext<Instance>
-  ) => object;
-  /**
-   * Disable the automatic "onResponse" logging
-   *
-   * @default true
-   */
-  autoLogging?: boolean | { ignore: (ctx: Context) => boolean };
-};
+interface BaseLoggerOptions extends pino.LoggerOptions {}
 
-export type Logger<Options = StandaloneLoggerOptions> = pino.Logger & Options;
+export type Logger = pino.Logger & BaseLoggerOptions;
 
 export type InferContext<T extends Elysia> = T extends Elysia<
   infer Path,
@@ -113,12 +110,12 @@ export type _INTERNAL_ElysiaLoggerPlugin<
 >;
 
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<
-  Options extends BaseLoggerOptions
+  Options extends BaseLoggerOptions & ElysiaLoggerOptions
 > = Omit<Options, 'autoLogging'> & {
   autoLogging?: true | { ignore: (ctx: Context) => boolean };
 };
 
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<
-  Options extends BaseLoggerOptions
+  Options extends BaseLoggerOptions & ElysiaLoggerOptions
 > = Omit<Options, 'autoLogging'> & { autoLogging: false };
 
