@@ -1,3 +1,10 @@
+# 0.0.16 - 18 Jan 2024
+
+Bug fix:
+
+- `createPinoLogger` omitting `file` & `stream` options
+- remove `Bun`'s `PathLike` type [#11](https://github.com/bogeychan/elysia-logger/issues/11)
+
 # 0.0.15 - 06 Jan 2024
 
 Bug fix:
