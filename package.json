@@ -33,16 +33,16 @@
     "release": "npm run build && npm run test && npm publish --access public"
   },
   "peerDependencies": {
-    "elysia": ">= 0.8.3"
+    "elysia": ">= 0.8.16"
   },
   "devDependencies": {
-    "bun-types": "1.0",
-    "elysia": "^0.8.3",
-    "pino-pretty": "^10.3.0",
+    "@types/bun": "1.0",
+    "elysia": "^0.8.16",
+    "pino-pretty": "^10.3.1",
     "typescript": "5"
   },
   "dependencies": {
-    "pino": "8.17.1"
+    "pino": "8.18.0"
   },
   "homepage": "https://github.com/bogeychan/elysia-logger",
   "bugs": "https://github.com/bogeychan/elysia-logger/issues",
