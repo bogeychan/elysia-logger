@@ -1,3 +1,10 @@
+# 0.0.17 - 07 Feb 2024
+
+Improvement:
+
+- bump `pino` to `8.18.0`
+- bump `elysia` to `0.8.16`
+
 # 0.0.16 - 18 Jan 2024
 
 Bug fix:
