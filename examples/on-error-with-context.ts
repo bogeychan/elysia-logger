@@ -43,4 +43,4 @@ app
   })
   .listen(8080);
 
-console.log(`Listening on http://${app.server!.hostname}:${app.server!.port}`);
+console.log(`Listening on ${app.server!.url}`);
