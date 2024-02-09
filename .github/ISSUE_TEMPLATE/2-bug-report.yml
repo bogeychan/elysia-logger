@@ -1,0 +1,39 @@
+name: 🐛 Bug Report
+description: Report an issue that should be fixed
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting a bug report.
+
+        Make sure you are running the latest versions of Elysia.JS, plugin and Bun
+        The bug you are experiencing may already have been fixed.
+
+        Please try to include as much information as possible.
+
+  - type: textarea
+    attributes:
+      label: What versions are running?
+      description: Provide your package.json including at least versions of Elysia.JS and the plugin you are running.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What steps can reproduce the bug?
+      description: Explain the bug and provide a code snippet that can reproduce it.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What is the expected behavior?
+      description: If possible, please provide text instead of a screenshot.
+  - type: textarea
+    attributes:
+      label: What do you see instead?
+      description: If possible, please provide text instead of a screenshot.
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: Is there anything else you think we should know?
+
