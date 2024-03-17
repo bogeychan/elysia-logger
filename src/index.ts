@@ -1,5 +1,5 @@
-import pino from 'pino';
-import { Elysia } from 'elysia';
+import pino from "pino";
+import { Elysia } from "elysia";
 
 import type {
   Logger,
@@ -15,8 +15,8 @@ import type {
   _INTERNAL_ElysiaLoggerPlugin,
   _INTERNAL_ElysiaLoggerPluginAutoLoggingState,
   _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions,
-  _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions
-} from './types';
+  _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions,
+} from "./types";
 
 /**
  * If you call one of the derived methods of this plugin (such as: ctx.log.info(object)) with a request or context object,
@@ -26,7 +26,7 @@ import type {
  *
  * I highly recommend to read the [Pino documentation](https://getpino.io/#/docs/api?id=options) yourself to learn about additional options.
  */
-import { formatters, serializers } from './config';
+import { formatters, serializers } from "./config";
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output (default behavior).
@@ -57,22 +57,22 @@ export function fileLogger(options: ElysiaFileLoggerOptions) {
 /**
  * Create a logger instance like the plugin.
  */
-export function createPinoLogger(
-  options: StandaloneLoggerOptions = {}
-): ElysiaLogger<ReturnType<typeof into>> {
+export function createPinoLogger(options: StandaloneLoggerOptions = {}) {
+  type ElysiaLoggerInstance = ElysiaLogger<ReturnType<typeof into>>;
+
   const log = createPinoLoggerInternal(options);
-  (log as unknown as ElysiaLogger).into = into.bind(log);
-  return log as unknown as ElysiaLogger<ReturnType<typeof into>>;
+  (log as unknown as ElysiaLoggerInstance).into = into.bind(log);
+  return log as unknown as ElysiaLoggerInstance;
 }
 
 function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
-  options.level ??= 'info';
+  options.level ??= "info";
   options.formatters ??= formatters;
   options.serializers ??= serializers;
 
   const streamOptions = options as StreamLoggerOptions;
 
-  if ('file' in options) {
+  if ("file" in options) {
     streamOptions.stream = pino.destination(options.file);
     delete (options as Partial<FileLoggerOptions>).file;
   }
@@ -88,11 +88,11 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
   let log: Logger;
 
   let app = new Elysia({
-    name: '@bogeychan/elysia-logger',
-    seed: options
-  }).derive((ctx) => {
+    name: "@bogeychan/elysia-logger",
+    seed: options,
+  }).derive({ as: "global" }, (ctx) => {
     log =
-      typeof options.customProps === 'function'
+      typeof options.customProps === "function"
         ? this.child(options.customProps(ctx))
         : this;
 
@@ -109,11 +109,11 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
       .onResponse((ctx) => {
-        if (log.level == 'silent') {
+        if (log.level == "silent") {
           return;
         }
 
-        if (typeof autoLogging == 'object' && autoLogging.ignore(ctx)) {
+        if (typeof autoLogging == "object" && autoLogging.ignore(ctx)) {
           return;
         }
 
@@ -136,9 +136,8 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
 const plugin = (options: LoggerOptions) =>
   into.bind(createPinoLoggerInternal(options))(options);
 
-export * from './config';
+export * from "./config";
 
-export type { InferContext } from './types';
+export type { InferContext } from "./types";
 
-export { pino } from 'pino';
-
+export { pino } from "pino";

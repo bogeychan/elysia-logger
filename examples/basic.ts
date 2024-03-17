@@ -1,13 +1,13 @@
-import { Elysia } from 'elysia';
+import { Elysia } from "elysia";
 
-import { logger } from '../src';
+import { logger } from "../src";
 
 const app = new Elysia()
   .use(logger())
-  .get('/', (ctx) => {
-    ctx.log.info(ctx, 'Context');
+  .get("/", (ctx) => {
+    ctx.log.info(ctx, "Context");
 
-    return 'basic';
+    return "basic";
   })
   .listen(8080);
 

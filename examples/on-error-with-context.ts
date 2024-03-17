@@ -1,13 +1,13 @@
-import { Elysia } from 'elysia';
+import { Elysia } from "elysia";
 
 import {
   type InferContext,
   createPinoLogger,
   formatters,
-  isContext
-} from '../src';
+  isContext,
+} from "../src";
 
-const myPlugin = () => (app: Elysia) => app.decorate('myProperty', 42);
+const myPlugin = () => (app: Elysia) => app.decorate("myProperty", 42);
 
 const app = new Elysia().use(myPlugin());
 
@@ -21,25 +21,25 @@ const log = createPinoLogger({
       if (isContext(object)) {
         // `false` on `onError` method
         return {
-          myProperty: (object as MyElysiaContext).myProperty
+          myProperty: (object as MyElysiaContext).myProperty,
         };
       }
 
       return formatters.log(object);
-    }
-  }
+    },
+  },
 });
 
 app
   .use(log.into()) // Call `into` to use the logger instance in both `ctx` and standalone
   .onError((ctx) => {
     log.error(ctx, ctx.error.name);
-    return 'onError';
+    return "onError";
   })
-  .get('/', (ctx) => {
-    ctx.log.info(ctx, 'Context');
+  .get("/", (ctx) => {
+    ctx.log.info(ctx, "Context");
 
-    throw { message: '1234', name: 'MyError' };
+    throw { message: "1234", name: "MyError" };
   })
   .listen(8080);
 

@@ -1,12 +1,12 @@
-import { Elysia } from 'elysia';
-import { randomUUID } from 'node:crypto';
+import { Elysia } from "elysia";
+import { randomUUID } from "node:crypto";
 
 import {
   logger,
   serializers,
   serializeRequest,
-  type InferContext
-} from '../src';
+  type InferContext,
+} from "../src";
 
 /**
  * the following coding shows how you can influence what is logged out:
@@ -22,13 +22,13 @@ const mySerializers = {
     return {
       ...serializeRequest(request),
       // https://http.dev/x-request-id
-      id: request.headers.get('X-Request-ID') ?? randomUUID(),
-      path: url.pathname
+      id: request.headers.get("X-Request-ID") ?? randomUUID(),
+      path: url.pathname,
     };
-  }
+  },
 };
 
-const myPlugin = () => new Elysia().decorate('myProperty', 42);
+const myPlugin = () => new Elysia().decorate("myProperty", 42);
 
 const app = new Elysia().use(myPlugin());
 
@@ -40,15 +40,15 @@ app
         return {
           params: ctx.params,
           query: ctx.query,
-          myProperty: ctx.myProperty
+          myProperty: ctx.myProperty,
         };
-      }
+      },
     })
   )
-  .get('/', (ctx) => {
-    ctx.log.info(ctx, 'Context');
+  .get("/", (ctx) => {
+    ctx.log.info(ctx, "Context");
 
-    return 'with-context';
+    return "with-context";
   })
   .listen(8080);
 

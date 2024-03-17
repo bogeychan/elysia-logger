@@ -1,5 +1,11 @@
-import type { pino } from 'pino';
-import type { Context, DecoratorBase, Elysia } from 'elysia';
+import type { pino } from "pino";
+import type {
+  Context,
+  DefinitionBase,
+  Elysia,
+  RouteBase,
+  SingletonBase,
+} from "elysia";
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
@@ -30,9 +36,7 @@ export type ElysiaLoggerOptions = {
    * This function will be invoked for each `log`-method called with `context`
    * where you can pass additional properties that need to be logged
    */
-  customProps?: <Instance extends Elysia>(
-    ctx: InferContext<Instance>
-  ) => object;
+  customProps?: (ctx: Context) => object;
   /**
    * Disable the automatic "onResponse" logging
    *
@@ -41,7 +45,7 @@ export type ElysiaLoggerOptions = {
   autoLogging?: boolean | { ignore: (ctx: Context) => boolean };
 };
 
-export interface ElysiaLogger<E extends Elysia = Elysia> extends Logger {
+export interface ElysiaLogger<E = Elysia> extends Logger {
   /**
    * Call `into` to use the logger instance in both `ctx` and standalone
    *
@@ -71,14 +75,18 @@ interface BaseLoggerOptions extends pino.LoggerOptions {}
 
 export type Logger = pino.Logger & BaseLoggerOptions;
 
-export type InferContext<T extends Elysia> = T extends Elysia<
+export type InferContext<T> = T extends Elysia<
   infer Path,
-  infer Decorators,
+  infer _Scoped,
+  infer Singleton,
   infer _Definitions,
-  infer _ParentSchema,
-  infer Routes
+  infer _Metadata,
+  infer Routes,
+  infer _EphemeralMetadata
 >
-  ? Context<Routes, DecoratorBase, Path> & Partial<Decorators['request']>
+  ? Context<Routes, SingletonBase, Path> &
+      Partial<Singleton["derive"]> &
+      Partial<Singleton["decorator"]>
   : never;
 
 /**
@@ -97,24 +105,36 @@ export type _INTERNAL_ElysiaLoggerPluginAutoLoggingState = {
 };
 
 export type _INTERNAL_ElysiaLoggerPlugin<
-  Store extends Elysia['store'] = Elysia['store']
+  Store extends Elysia["store"] = Elysia["store"]
 > = Elysia<
-  '',
+  "",
+  false,
   {
-    request: {};
     store: Store;
-    derive: { log: Logger };
+    derive: { readonly log: Logger };
+    decorator: {};
+    resolve: {};
+  },
+  DefinitionBase,
+  {
+    macro: {};
+    schema: {};
+  },
+  RouteBase,
+  {
+    store: {};
+    derive: {};
+    decorator: {};
     resolve: {};
   }
 >;
 
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<
   Options extends BaseLoggerOptions & ElysiaLoggerOptions
-> = Omit<Options, 'autoLogging'> & {
+> = Omit<Options, "autoLogging"> & {
   autoLogging?: true | { ignore: (ctx: Context) => boolean };
 };
 
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<
   Options extends BaseLoggerOptions & ElysiaLoggerOptions
-> = Omit<Options, 'autoLogging'> & { autoLogging: false };
-
+> = Omit<Options, "autoLogging"> & { autoLogging: false };

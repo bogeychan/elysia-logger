@@ -1,6 +1,6 @@
-import { Elysia } from 'elysia';
+import { Elysia } from "elysia";
 
-import { logger } from '../src';
+import { logger } from "../src";
 
 /**
  * make sure to install the `pino-pretty` library before running this example:
@@ -11,18 +11,18 @@ const app = new Elysia()
   .use(
     logger({
       transport: {
-        target: 'pino-pretty',
+        target: "pino-pretty",
         options: {
-          colorize: true
-        }
-      }
+          colorize: true,
+        },
+      },
     })
   )
-  .get('/', (ctx) => {
-    ctx.log.error(ctx, 'Context');
-    ctx.log.info(ctx.request, 'Request');
+  .get("/", (ctx) => {
+    ctx.log.error(ctx, "Context");
+    ctx.log.info(ctx.request, "Request");
 
-    return 'pino-pretty';
+    return "pino-pretty";
   })
   .listen(8080);
 
