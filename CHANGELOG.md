@@ -1,3 +1,9 @@
+# 0.0.18 - 18 Mar 2024
+
+Bug fix:
+
+- bump `elysia` to `1.0.0` [#14](https://github.com/bogeychan/elysia-logger/issues/14)
+
 # 0.0.17 - 07 Feb 2024
 
 Improvement:
@@ -120,4 +126,3 @@ Bug fix:
 Feature:
 
 - `StreamLogger` & `FileLogger`
-
