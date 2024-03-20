@@ -81,4 +81,49 @@ describe("auto logging", () => {
 
     expect(stream.messages.length).toBe(0);
   });
+
+  it("should if enabled by condition", async () => {
+    const stream = new InMemoryDestination();
+
+    const app = new Elysia()
+      .use(
+        logger({
+          stream,
+          autoLogging: {
+            ignore() {
+              return false;
+            },
+          },
+        })
+      )
+      .get("/", () => "");
+
+    const req = newReq();
+    await app.handle(req);
+
+    expect(stream.messages.length).toBe(1);
+    stream.expectToHaveMessage(0, req);
+  });
+
+  it("should not if disabled by condition", async () => {
+    const stream = new InMemoryDestination();
+
+    const app = new Elysia()
+      .use(
+        logger({
+          stream,
+          autoLogging: {
+            ignore() {
+              return true;
+            },
+          },
+        })
+      )
+      .get("/", () => "");
+
+    const req = newReq();
+    await app.handle(req);
+
+    expect(stream.messages.length).toBe(0);
+  });
 });
