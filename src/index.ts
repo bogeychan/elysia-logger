@@ -108,7 +108,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
       .onRequest((ctx) => {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
-      .onResponse((ctx) => {
+      .onResponse({ as: "global" }, (ctx) => {
         if (log.level == "silent") {
           return;
         }
