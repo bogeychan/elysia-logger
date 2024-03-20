@@ -1,3 +1,9 @@
+# 0.0.19 - 20 Mar 2024
+
+Bug fix:
+
+- auto logging [#14](https://github.com/bogeychan/elysia-logger/issues/14)
+
 # 0.0.18 - 18 Mar 2024
 
 Bug fix:
