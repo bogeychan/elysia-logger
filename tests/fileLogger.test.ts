@@ -25,11 +25,7 @@ describe("file logger", () => {
 
     await Bun.sleep(1_000); // wait for file to be written
 
-    const stream = new InMemoryDestination();
-    stream.messages = (await Bun.file(LOG_FILE).text())
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line); // remove empty-new line..
+    const stream = await InMemoryDestination.fromFile(LOG_FILE);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);

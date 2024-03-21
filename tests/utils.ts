@@ -54,6 +54,15 @@ expect.extend({
 export class InMemoryDestination implements pino.DestinationStream {
   messages: string[] = [];
 
+  static async fromFile(path: string) {
+    const stream = new InMemoryDestination();
+    stream.messages = (await Bun.file(path).text())
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line); // remove empty-new line..
+    return stream;
+  }
+
   write(msg: string): void {
     this.messages.push(msg);
   }
