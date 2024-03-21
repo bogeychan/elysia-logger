@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import { describe, it, expect } from "bun:test";
 
 import { logger } from "../src";
@@ -117,6 +117,7 @@ describe("custom props", () => {
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);
+    expect(msg).toHaveElysiaLoggerResponseProps();
     expect(msg).toHaveProperty("yay", 42);
   });
 });
