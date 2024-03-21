@@ -13,20 +13,20 @@ bun add @bogeychan/elysia-logger
 ## Usage
 
 ```ts
-import { Elysia } from 'elysia';
-import { logger } from '@bogeychan/elysia-logger';
+import { Elysia } from "elysia";
+import { logger } from "@bogeychan/elysia-logger";
 
 const app = new Elysia()
   .use(
     logger({
-      level: 'error'
+      level: "error",
     })
   )
-  .get('/', (ctx) => {
-    ctx.log.error(ctx, 'Context');
-    ctx.log.info(ctx.request, 'Request'); // noop
+  .get("/", (ctx) => {
+    ctx.log.error(ctx, "Context");
+    ctx.log.info(ctx.request, "Request"); // noop
 
-    return 'Hello World';
+    return "Hello World";
   })
   .listen(8080);
 
@@ -36,10 +36,10 @@ console.log(`Listening on http://${app.server!.hostname}:${app.server!.port}`);
 ### Log to a file, or
 
 ```ts
-import { fileLogger } from '@bogeychan/elysia-logger';
+import { fileLogger } from "@bogeychan/elysia-logger";
 
 fileLogger({
-  file: './my.log'
+  file: "./my.log",
 });
 ```
 
@@ -56,9 +56,9 @@ logger({
 ### Include additional request context info for debugging tools
 
 ```ts
-import { logger, type InferContext } from '@bogeychan/elysia-logger';
+import { logger, type InferContext } from "@bogeychan/elysia-logger";
 
-const myPlugin = () => (app: Elysia) => app.decorate('myProperty', 42);
+const myPlugin = () => new Elysia().decorate("myProperty", 42);
 
 // ...
 
@@ -68,29 +68,29 @@ app
   .use(
     logger({
       /**
-       * This function will be invoked for each `log`-method called with `context`
+       * This function will be invoked for each `log`-method called
        * where you can pass additional properties that need to be logged
        */
       customProps(ctx: InferContext<typeof app>) {
         return {
           params: ctx.params,
           query: ctx.query,
-          myProperty: ctx.myProperty
+          myProperty: ctx.myProperty,
         };
-      }
+      },
     })
   )
-  .get('/', (ctx) => {
-    ctx.log.info(ctx, 'Context');
+  .get("/", (ctx) => {
+    ctx.log.info(ctx, "Context");
 
-    return 'with-context';
+    return "with-context";
   });
 ```
 
 ### Use the logger instance both `Standalone` and inside `Context`
 
 ```ts
-import { createPinoLogger } from '@bogeychan/elysia-logger';
+import { createPinoLogger } from "@bogeychan/elysia-logger";
 
 const log = createPinoLogger(/* ... */);
 
@@ -98,19 +98,19 @@ app
   .use(log.into(/* ... */))
   .onError((ctx) => {
     log.error(ctx, ctx.error.name);
-    return 'onError';
+    return "onError";
   })
-  .get('/', (ctx) => {
-    ctx.log.info(ctx, 'Context');
+  .get("/", (ctx) => {
+    ctx.log.info(ctx, "Context");
 
-    throw { message: '1234', name: 'MyError' };
+    throw { message: "1234", name: "MyError" };
   });
 ```
 
 ### Automatic `onResponse` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http)
 
 ```ts
-import { logger } from '@bogeychan/elysia-logger';
+import { logger } from "@bogeychan/elysia-logger";
 
 app
   .use(
@@ -120,11 +120,11 @@ app
       autoLogging: {
         ignore(ctx) {
           return true; // ignore logging for requests based on condition
-        }
-      }
+        },
+      },
     })
   )
-  .get('/', (ctx) => 'autoLogging');
+  .get("/", (ctx) => "autoLogging");
 ```
 
 Checkout the [examples](./examples) folder on github for further use cases such as the integration of [pino-pretty](https://github.com/pinojs/pino-pretty) for readable console outputs.
@@ -132,4 +132,3 @@ Checkout the [examples](./examples) folder on github for further use cases such 
 ## License
 
 [MIT](LICENSE)
-
