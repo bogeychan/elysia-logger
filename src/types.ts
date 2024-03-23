@@ -1,11 +1,5 @@
 import type { pino } from "pino";
-import type {
-  Context,
-  DefinitionBase,
-  Elysia,
-  RouteBase,
-  SingletonBase,
-} from "elysia";
+import type { Context, DefinitionBase, Elysia, RouteBase } from "elysia";
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
@@ -76,17 +70,24 @@ interface BaseLoggerOptions extends pino.LoggerOptions {}
 export type Logger = pino.Logger & BaseLoggerOptions;
 
 export type InferContext<T> = T extends Elysia<
-  infer Path,
+  infer _Path,
   infer _Scoped,
   infer Singleton,
   infer _Definitions,
-  infer _Metadata,
-  infer Routes,
-  infer _EphemeralMetadata
+  infer Metadata,
+  infer _Routes,
+  infer Ephemeral,
+  infer Volatile
 >
-  ? Context<Routes, SingletonBase, Path> &
-      Partial<Singleton["derive"]> &
-      Partial<Singleton["decorator"]>
+  ? Partial<
+      Context<
+        Metadata["schema"] & Ephemeral["schema"] & Volatile["schema"],
+        Singleton & {
+          derive: Ephemeral["derive"] & Volatile["derive"];
+          resolve: Ephemeral["resolve"] & Volatile["resolve"];
+        }
+      >
+    >
   : never;
 
 /**
@@ -122,10 +123,14 @@ export type _INTERNAL_ElysiaLoggerPlugin<
   },
   RouteBase,
   {
-    store: {};
     derive: {};
-    decorator: {};
     resolve: {};
+    schema: {};
+  },
+  {
+    derive: {};
+    resolve: {};
+    schema: {};
   }
 >;
 
