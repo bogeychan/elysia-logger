@@ -30,7 +30,7 @@ const app = new Elysia()
   })
   .listen(8080);
 
-console.log(`Listening on http://${app.server!.hostname}:${app.server!.port}`);
+console.log(`Listening on ${app.server!.url}`);
 ```
 
 ### Log to a file, or
