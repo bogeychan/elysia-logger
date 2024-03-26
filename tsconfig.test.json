@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "preserveSymlinks": true,
+        "incremental": true,
+        "lib": [
+            "ESNext"
+        ],
+        "moduleResolution": "Node",
+        "strict": true,
+        "skipLibCheck": true,
+        "noEmit": true
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "tests/types/**/*"
+    ]
+}

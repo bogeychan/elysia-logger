@@ -61,6 +61,7 @@ export function createPinoLogger(options: StandaloneLoggerOptions = {}) {
   type ElysiaLoggerInstance = ElysiaLogger<ReturnType<typeof into>>;
 
   const log = createPinoLoggerInternal(options);
+  // @ts-ignore
   (log as unknown as ElysiaLoggerInstance).into = into.bind(log);
   return log as unknown as ElysiaLoggerInstance;
 }
@@ -100,8 +101,8 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
   });
 
   if (autoLogging) {
-    app = (
-      app as _INTERNAL_ElysiaLoggerPlugin<
+    return (
+      app as unknown as _INTERNAL_ElysiaLoggerPlugin<
         _INTERNAL_Writeonly<_INTERNAL_ElysiaLoggerPluginAutoLoggingState>
       >
     )
