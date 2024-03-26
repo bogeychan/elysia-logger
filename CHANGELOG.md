@@ -1,3 +1,9 @@
+# 0.0.20 - 26 Mar 2024
+
+Bug fix:
+
+- bump `elysia` to `1.0.9` and fixed InferContext [#14](https://github.com/bogeychan/elysia-logger/issues/14)
+
 # 0.0.19 - 20 Mar 2024
 
 Bug fix:
