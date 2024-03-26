@@ -13,3 +13,4 @@ tests
 CHANGELOG.md
 MIGRATION.md
 tsconfig.esm.json
+tsconfig.test.tsbuildinfo
