@@ -1,3 +1,9 @@
+# 0.0.21 - 09 Apr 2024
+
+Bug fix:
+
+- undefined log during ParseError [#16](https://github.com/bogeychan/elysia-logger/issues/16)
+
 # 0.0.20 - 26 Mar 2024
 
 Bug fix:
