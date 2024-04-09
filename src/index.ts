@@ -1,5 +1,5 @@
 import pino from "pino";
-import { Elysia } from "elysia";
+import { Context, Elysia } from "elysia";
 
 import type {
   Logger,
@@ -88,16 +88,21 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
 
   let log: Logger;
 
+  const getLog = (ctx: Context) => {
+    if (!log) {
+      log =
+        typeof options.customProps === "function"
+          ? this.child(options.customProps(ctx))
+          : this;
+    }
+    return log;
+  };
+
   let app = new Elysia({
     name: "@bogeychan/elysia-logger",
     seed: options,
   }).derive({ as: "global" }, (ctx) => {
-    log =
-      typeof options.customProps === "function"
-        ? this.child(options.customProps(ctx))
-        : this;
-
-    return { log };
+    return { log: getLog(ctx) };
   });
 
   if (autoLogging) {
@@ -110,6 +115,8 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
       .onResponse({ as: "global" }, (ctx) => {
+        const log = getLog(ctx);
+
         if (log.level == "silent") {
           return;
         }
