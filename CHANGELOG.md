@@ -1,3 +1,9 @@
+# 0.0.22 - 24 Mai 2024
+
+Improvement:
+
+- bump `pino` to `9.1.0`
+
 # 0.0.21 - 09 Apr 2024
 
 Bug fix:
