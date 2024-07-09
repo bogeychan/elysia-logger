@@ -1,5 +1,5 @@
 import pino from "pino";
-import { Context, Elysia } from "elysia";
+import { Elysia } from "elysia";
 
 import type {
   Logger,
@@ -7,6 +7,7 @@ import type {
   LoggerOptions,
   FileLoggerOptions,
   StreamLoggerOptions,
+  ElysiaLoggerContext,
   ElysiaLoggerOptions,
   StandaloneLoggerOptions,
   ElysiaFileLoggerOptions,
@@ -86,23 +87,19 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
 
   delete options.autoLogging;
 
-  let log: Logger;
-
-  const getLog = (ctx: Context) => {
-    if (!log) {
-      log =
-        typeof options.customProps === "function"
-          ? this.child(options.customProps(ctx))
-          : this;
-    }
-    return log;
+  const getLog = (ctx: ElysiaLoggerContext) => {
+    return typeof options.customProps === "function"
+      ? this.child(options.customProps(ctx))
+      : this;
   };
 
   let app = new Elysia({
     name: "@bogeychan/elysia-logger",
     seed: options,
   }).derive({ as: "global" }, (ctx) => {
-    return { log: getLog(ctx) };
+    const loggerCtx = ctx as unknown as ElysiaLoggerContext;
+    loggerCtx.isError = false;
+    return { log: getLog(loggerCtx) };
   });
 
   if (autoLogging) {
@@ -115,13 +112,16 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
       .onResponse({ as: "global" }, (ctx) => {
-        const log = getLog(ctx);
+        const loggerCtx = ctx as unknown as ElysiaLoggerContext;
+        loggerCtx.isError = false;
+
+        const log = getLog(loggerCtx);
 
         if (log.level == "silent") {
           return;
         }
 
-        if (typeof autoLogging == "object" && autoLogging.ignore(ctx)) {
+        if (typeof autoLogging == "object" && autoLogging.ignore(loggerCtx)) {
           return;
         }
 
@@ -130,12 +130,27 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store.responseTime = ctx.store.endTime - ctx.store.startTime;
 
         log.info(ctx);
+      })
+      .onError({ as: "global" }, (ctx) => {
+        const loggerCtx = ctx as ElysiaLoggerContext;
+        loggerCtx.isError = true;
+
+        const log = getLog(loggerCtx);
+
+        if (log.level == "silent") {
+          return;
+        }
+
+        if (typeof autoLogging == "object" && autoLogging.ignore(loggerCtx)) {
+          return;
+        }
+
+        if (ctx.code === "NOT_FOUND") {
+          log.info(ctx);
+        } else {
+          log.error(ctx);
+        }
       });
-    // ! log is undefined or onError called twice for custom error...
-    // ? tested on elysia@0.7.17
-    // .onError((ctx) => {
-    //   log.error(ctx);
-    // });
   }
 
   return app;

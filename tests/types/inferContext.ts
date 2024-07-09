@@ -15,7 +15,9 @@ import { type InferContext, logger } from "../../src";
     app.use(
       logger({
         customProps(ctx: InferContext<typeof app>) {
-          expectType<"bar" | undefined>(ctx.foo);
+          if (!ctx.isError) {
+            expectType<"bar" | undefined>(ctx.foo);
+          }
           return {};
         },
       })
@@ -32,7 +34,9 @@ import { type InferContext, logger } from "../../src";
     app.use(
       logger({
         customProps(ctx: InferContext<typeof app>) {
-          expectType<"bar" | undefined>(ctx.foo);
+          if (!ctx.isError) {
+            expectType<"bar" | undefined>(ctx.foo);
+          }
           return {};
         },
       })
@@ -49,7 +53,9 @@ import { type InferContext, logger } from "../../src";
     app.use(
       logger({
         customProps(ctx: InferContext<typeof app>) {
-          expectType<"bar" | undefined>(ctx.foo);
+          if (!ctx.isError) {
+            expectType<"bar" | undefined>(ctx.foo);
+          }
           return {};
         },
       })
@@ -65,7 +71,9 @@ import { type InferContext, logger } from "../../src";
   app.use(
     logger({
       customProps(ctx: InferContext<typeof app>) {
-        expectType<42 | undefined>(ctx.myProperty);
+        if (!ctx.isError) {
+          expectType<42 | undefined>(ctx.myProperty);
+        }
         return {};
       },
     })
@@ -80,7 +88,35 @@ import { type InferContext, logger } from "../../src";
   app.use(
     logger({
       customProps(ctx: InferContext<typeof app>) {
-        expectType<number | undefined>(ctx.store.myState);
+        if (!ctx.isError) {
+          expectType<number | undefined>(ctx.store.myState);
+        }
+        return {};
+      },
+    })
+  );
+}
+
+{
+  // infer custom error
+
+  const app = new Elysia().error("myError", Error);
+
+  app.use(
+    logger({
+      customProps(ctx: InferContext<typeof app>) {
+        if (ctx.isError) {
+          expectType<
+            | "UNKNOWN"
+            | "VALIDATION"
+            | "NOT_FOUND"
+            | "PARSE"
+            | "INTERNAL_SERVER_ERROR"
+            | "INVALID_COOKIE_SIGNATURE"
+            | "myError"
+            | undefined
+          >(ctx.code);
+        }
         return {};
       },
     })

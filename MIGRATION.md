@@ -1,25 +1,27 @@
 # Migration Guide
 
-## v0.0.11 to v0.0.12
+## v0.0.22 to v0.0.23
 
-### Automatic `onResponse` logging by `default`
+### Automatic `onError` logging by `default`
 
 Use:
 
 ```ts
-import { logger, createPinoLogger } from '@bogeychan/elysia-logger';
+import { type InferContext } from "@bogeychan/elysia-logger";
 
 app.use(
   logger({
-    autoLogging: false
-  })
-);
+    customProps(ctx: InferContext<typeof app>) {
+      if (ctx.isError) {
+        return {
+          code: ctx.code,
+        };
+      }
 
-const log = createPinoLogger();
-
-app.use(
-  log.into({
-    autoLogging: false
+      return {
+        myProperty: ctx.myProperty,
+      };
+    },
   })
 );
 ```
@@ -27,7 +29,47 @@ app.use(
 Instead of:
 
 ```ts
-import { logger, createPinoLogger } from '@bogeychan/elysia-logger';
+import { type InferContext } from "@bogeychan/elysia-logger";
+
+app.use(
+  logger({
+    customProps(ctx: InferContext<typeof app>) {
+      return {
+        myProperty: ctx.myProperty,
+      };
+    },
+  })
+);
+```
+
+## v0.0.11 to v0.0.12
+
+### Automatic `onResponse` logging by `default`
+
+Use:
+
+```ts
+import { logger, createPinoLogger } from "@bogeychan/elysia-logger";
+
+app.use(
+  logger({
+    autoLogging: false,
+  })
+);
+
+const log = createPinoLogger();
+
+app.use(
+  log.into({
+    autoLogging: false,
+  })
+);
+```
+
+Instead of:
+
+```ts
+import { logger, createPinoLogger } from "@bogeychan/elysia-logger";
 
 app.use(logger());
 
@@ -43,13 +85,13 @@ app.use(log.into());
 Use:
 
 ```ts
-import { type InferContext } from '@bogeychan/elysia-logger';
+import { type InferContext } from "@bogeychan/elysia-logger";
 
 app.use(
   logger({
     customProps(ctx: InferContext<typeof app>) {
       return {};
-    }
+    },
   })
 );
 ```
@@ -59,8 +101,8 @@ Instead of:
 ```ts
 import {
   type ElysiaContextForInstance,
-  type InferElysiaInstance
-} from '@bogeychan/elysia-logger';
+  type InferElysiaInstance,
+} from "@bogeychan/elysia-logger";
 
 app.use(
   logger({
@@ -68,7 +110,7 @@ app.use(
       ctx: ElysiaContextForInstance<InferElysiaInstance<typeof app>>
     ) {
       return {};
-    }
+    },
   })
 );
 ```
@@ -82,8 +124,8 @@ Use:
 ```ts
 app
   .use(logger().derive(({ log, ...rest }) => ({ myLogger: log, ...rest })))
-  .get('/', (ctx) => {
-    ctx.myLogger.info(ctx.request, 'Request');
+  .get("/", (ctx) => {
+    ctx.myLogger.info(ctx.request, "Request");
   });
 ```
 
@@ -93,10 +135,10 @@ Instead of:
 app
   .use(
     logger({
-      contextKeyName: 'myLogger'
+      contextKeyName: "myLogger",
     })
   )
-  .get('/', (ctx) => {
-    ctx.myLogger.info(ctx.request, 'Request');
+  .get("/", (ctx) => {
+    ctx.myLogger.info(ctx.request, "Request");
   });
 ```

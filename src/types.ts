@@ -1,5 +1,12 @@
 import type { pino } from "pino";
-import type { Context, Elysia, RouteSchema } from "elysia";
+import type {
+  Context,
+  Elysia,
+  RouteSchema,
+  ErrorHandler,
+  SingletonBase,
+  EphemeralType,
+} from "elysia";
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output.
@@ -25,18 +32,30 @@ export type StandaloneLoggerOptions = StreamLoggerOptions | FileLoggerOptions;
 
 export type LoggerOptions = StandaloneLoggerOptions & ElysiaLoggerOptions;
 
+export type ErrorContext<
+  T extends Record<string, Error> = {},
+  Route extends RouteSchema = RouteSchema,
+  Singleton extends SingletonBase = SingletonBase,
+  Ephemeral extends EphemeralType = EphemeralType,
+  Volatile extends EphemeralType = EphemeralType
+> = Parameters<ErrorHandler<T, Route, Singleton, Ephemeral, Volatile>>[0];
+
+export type ElysiaLoggerContext =
+  | ({ isError: false } & Context)
+  | ({ isError: true } & ErrorContext);
+
 export type ElysiaLoggerOptions = {
   /**
    * This function will be invoked for each `log`-method called with `context`
    * where you can pass additional properties that need to be logged
    */
-  customProps?: (ctx: Context) => object;
+  customProps?: (ctx: ElysiaLoggerContext) => object;
   /**
    * Disable the automatic "onResponse" logging
    *
    * @default true
    */
-  autoLogging?: boolean | { ignore: (ctx: Context) => boolean };
+  autoLogging?: boolean | { ignore: (ctx: ElysiaLoggerContext) => boolean };
 };
 
 export interface ElysiaLogger<E = Elysia> extends Logger {
@@ -73,25 +92,44 @@ export type InferContext<T> = T extends Elysia<
   infer _Path,
   infer _Scoped,
   infer Singleton,
-  infer _Definitions,
+  infer Definitions,
   infer _Metadata,
   infer _Routes,
   infer Ephemeral,
   infer Volatile
 >
-  ? Context<
-      RouteSchema,
-      {
-        decorator: Partial<Singleton["decorator"]>;
-        store: Partial<Singleton["store"]>;
-        derive: Partial<
-          Singleton["derive"] & Ephemeral["derive"] & Volatile["derive"]
-        >;
-        resolve: Partial<
-          Singleton["resolve"] & Ephemeral["resolve"] & Volatile["resolve"]
-        >;
-      }
-    >
+  ?
+      | ({
+          isError: false;
+        } & Context<
+          RouteSchema,
+          {
+            decorator: Partial<Singleton["decorator"]>;
+            store: Partial<Singleton["store"]>;
+            derive: Partial<
+              Singleton["derive"] & Ephemeral["derive"] & Volatile["derive"]
+            >;
+            resolve: Partial<
+              Singleton["resolve"] & Ephemeral["resolve"] & Volatile["resolve"]
+            >;
+          }
+        >)
+      | ({
+          isError: true;
+        } & ErrorContext<
+          Definitions["error"],
+          RouteSchema,
+          {
+            decorator: Partial<Singleton["decorator"]>;
+            store: Partial<Singleton["store"]>;
+            derive: Partial<
+              Singleton["derive"] & Ephemeral["derive"] & Volatile["derive"]
+            >;
+            resolve: Partial<
+              Singleton["resolve"] & Ephemeral["resolve"] & Volatile["resolve"]
+            >;
+          }
+        >)
   : never;
 
 /**
@@ -125,7 +163,7 @@ export type _INTERNAL_ElysiaLoggerPlugin<
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<
   Options extends BaseLoggerOptions & ElysiaLoggerOptions
 > = Omit<Options, "autoLogging"> & {
-  autoLogging?: true | { ignore: (ctx: Context) => boolean };
+  autoLogging?: true | { ignore: (ctx: ElysiaLoggerContext) => boolean };
 };
 
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<
