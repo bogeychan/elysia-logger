@@ -1,3 +1,18 @@
+# 0.1.0 -
+
+Improvement:
+
+- `formatters.ts` now logs `code` and `message` if `Context` is an error
+- infer type in util functions of `formatters.ts`
+- bump `pino` to `8.18.0`
+- bump `elysia` to `1.0.27`
+
+Breaking Change:
+
+- automatic `onError` logging by `default`; [#18](https://github.com/bogeychan/elysia-logger/issues/18)
+
+  For more details checkout the [migration guide](./MIGRATION.md)
+
 # 0.0.22 - 24 Mai 2024
 
 Improvement:

@@ -1,6 +1,6 @@
 {
   "name": "@bogeychan/elysia-logger",
-  "version": "0.0.22",
+  "version": "0.1.0-rc.2",
   "description": "A plugin for Elysia.js for logging using the pino library",
   "author": {
     "name": "bogeychan",
@@ -39,12 +39,12 @@
   "devDependencies": {
     "@types/bun": "1.0",
     "elysia": "1.0.27",
-    "pino-pretty": "^10.3.1",
+    "pino-pretty": "^11.2.1",
     "tsd": "^0.30.7",
     "typescript": "5"
   },
   "dependencies": {
-    "pino": "^9.1.0"
+    "pino": "^9.2.0"
   },
   "homepage": "https://github.com/bogeychan/elysia-logger",
   "bugs": "https://github.com/bogeychan/elysia-logger/issues",

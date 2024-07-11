@@ -40,8 +40,11 @@ export type ErrorContext<
   Volatile extends EphemeralType = EphemeralType
 > = Parameters<ErrorHandler<T, Route, Singleton, Ephemeral, Volatile>>[0];
 
-export type ElysiaLoggerContext =
-  | ({ isError: false } & Context)
+export type ElysiaLoggerContext<
+  Route extends RouteSchema = {},
+  Singleton extends SingletonBase = SingletonBase
+> =
+  | ({ isError: false } & Context<Route, Singleton>)
   | ({ isError: true } & ErrorContext);
 
 export type ElysiaLoggerOptions = {

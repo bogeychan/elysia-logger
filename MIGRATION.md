@@ -1,6 +1,6 @@
 # Migration Guide
 
-## v0.0.22 to v0.0.23
+## v0.0.22 to v0.1.0
 
 ### Automatic `onError` logging by `default`
 
