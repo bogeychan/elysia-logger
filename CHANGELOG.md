@@ -1,4 +1,4 @@
-# 0.1.0 -
+# 0.1.0 - 11 July 2024
 
 Improvement:
 
@@ -12,6 +12,10 @@ Breaking Change:
 - automatic `onError` logging by `default`; [#18](https://github.com/bogeychan/elysia-logger/issues/18)
 
   For more details checkout the [migration guide](./MIGRATION.md)
+
+- `InferContext` now contains either `Context` or `ErrorContext`. It won't work outside the plugin scope.
+
+  You can find the previous version of `InferContext` [here](https://github.com/bogeychan/elysia-logger/blob/140385a1c2754485fb98edd4fb6ac1fa7ea91884/src/types.ts#L72-L95). Just copy & paste it into your project with a different name :)
 
 # 0.0.22 - 24 Mai 2024
 
