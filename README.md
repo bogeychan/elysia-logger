@@ -72,6 +72,12 @@ app
        * where you can pass additional properties that need to be logged
        */
       customProps(ctx: InferContext<typeof app>) {
+        if (ctx.isError) {
+          return {
+            code: ctx.code,
+          };
+        }
+
         return {
           params: ctx.params,
           query: ctx.query,
@@ -103,11 +109,11 @@ app
   .get("/", (ctx) => {
     ctx.log.info(ctx, "Context");
 
-    throw { message: "1234", name: "MyError" };
+    throw new Error("whelp");
   });
 ```
 
-### Automatic `onResponse` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http)
+### Automatic `onResponse` & `onError` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http)
 
 ```ts
 import { logger } from "@bogeychan/elysia-logger";
