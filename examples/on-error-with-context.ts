@@ -39,7 +39,7 @@ app
   .get("/", (ctx) => {
     ctx.log.info(ctx, "Context");
 
-    throw { message: "1234", name: "MyError" };
+    throw new Error("whelp");
   })
   .listen(8080);
 
