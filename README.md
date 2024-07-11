@@ -53,7 +53,7 @@ logger({
 });
 ```
 
-### Include additional request context info for debugging tools
+### Include additional request context info
 
 ```ts
 import { logger, type InferContext } from "@bogeychan/elysia-logger";
@@ -62,7 +62,13 @@ const myPlugin = () => new Elysia().decorate("myProperty", 42);
 
 // ...
 
-app = app.use(myPlugin());
+class MyError extends Error {
+  constructor(message: string, public myValue: string) {
+    super(message);
+  }
+}
+
+app = app.error("myError", MyError).use(myPlugin());
 
 app
   .use(
@@ -72,9 +78,9 @@ app
        * where you can pass additional properties that need to be logged
        */
       customProps(ctx: InferContext<typeof app>) {
-        if (ctx.isError) {
+        if (ctx.isError && ctx.code === "myError") {
           return {
-            code: ctx.code,
+            myValue: ctx.error.myValue,
           };
         }
 
@@ -90,6 +96,9 @@ app
     ctx.log.info(ctx, "Context");
 
     return "with-context";
+  })
+  .get("/error", () => {
+    throw new MyError("whelp", "yay");
   });
 ```
 
