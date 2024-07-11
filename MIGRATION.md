@@ -13,9 +13,7 @@ app.use(
   logger({
     customProps(ctx: InferContext<typeof app>) {
       if (ctx.isError) {
-        return {
-          code: ctx.code,
-        };
+        return {};
       }
 
       return {
