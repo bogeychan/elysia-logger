@@ -13,6 +13,8 @@ app.use(
   logger({
     customProps(ctx: InferContext<typeof app>) {
       if (ctx.isError) {
+        // you can pass additional properties like `ctx.myProperty` too
+        // but they might be `undefined` depending on error cause
         return {};
       }
 
