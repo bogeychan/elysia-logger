@@ -1,3 +1,9 @@
+# 0.1.1 - 16 July 2024
+
+Bug fix:
+
+- bump `elysia` to `1.1.0`
+
 # 0.1.0 - 11 July 2024
 
 Improvement:
