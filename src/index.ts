@@ -111,7 +111,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
       .onRequest((ctx) => {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
-      .onResponse({ as: "global" }, (ctx) => {
+      .onAfterResponse({ as: "global" }, (ctx) => {
         const loggerCtx = ctx as unknown as ElysiaLoggerContext;
         loggerCtx.isError = false;
 

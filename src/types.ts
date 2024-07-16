@@ -54,7 +54,7 @@ export type ElysiaLoggerOptions = {
    */
   customProps?: (ctx: ElysiaLoggerContext) => object;
   /**
-   * Disable the automatic "onResponse" logging
+   * Disable the automatic "onAfterResponse" & "onError" logging
    *
    * @default true
    */

@@ -122,7 +122,7 @@ app
   });
 ```
 
-### Automatic `onResponse` & `onError` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http)
+### Automatic `onAfterResponse` & `onError` logging by `default`; based on [pino-http](https://github.com/pinojs/pino-http)
 
 ```ts
 import { logger } from "@bogeychan/elysia-logger";

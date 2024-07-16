@@ -65,7 +65,7 @@ describe("Error", () => {
     await app.handle(req);
 
     expect(isNotFoundError).toBeTrue();
-    expect(stream.messages.length).toBe(1); // TODO: should be 2 but onResponse skipped
+    expect(stream.messages.length).toBe(1); // TODO: should be 2 but onAfterResponse skipped
     stream.expectToHaveContextProps(0, req);
     // const msg = stream.expectToHaveContextProps(1, req);
     // expect(msg).toHaveElysiaLoggerResponseProps();
