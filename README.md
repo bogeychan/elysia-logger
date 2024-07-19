@@ -2,7 +2,7 @@
 
 A plugin for [Elysia.js](https://elysiajs.com) for logging using the [pino](https://getpino.io) library.
 
-## [Migration guide](./MIGRATION.md)
+## [Migration Guide](./MIGRATION.md)
 
 ## Installation
 
