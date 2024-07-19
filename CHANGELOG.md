@@ -19,7 +19,7 @@ Breaking Change:
 
   For more details checkout the [migration guide](./MIGRATION.md)
 
-- `InferContext` now contains either `Context` or `ErrorContext`. It won't work outside the plugin scope.
+- `InferContext` now contains either `Context` or `ErrorContext`
 
   For more details checkout the [migration guide](./MIGRATION.md)
 
