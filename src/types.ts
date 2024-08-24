@@ -171,4 +171,4 @@ export type _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions<
 
 export type _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions<
   Options extends BaseLoggerOptions & ElysiaLoggerOptions
-> = Omit<Options, "autoLogging"> & { autoLogging: false };
+> = Omit<Options, "autoLogging"> & { autoLogging: false | boolean };
