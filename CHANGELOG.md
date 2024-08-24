@@ -1,3 +1,9 @@
+# 0.1.2 - 16 July 2024
+
+Bug fix:
+
+- pass `boolean` to `autoLogging` [#21](https://github.com/bogeychan/elysia-logger/issues/21)
+
 # 0.1.1 - 16 July 2024
 
 Bug fix:
