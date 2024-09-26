@@ -111,7 +111,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
       .onRequest((ctx) => {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
-      .onAfterResponse({ as: "global" }, (ctx) => {
+      .onAfterResponse({ as: "global" }, (ctx: ElysiaLoggerContext) => {
         const loggerCtx = ctx as unknown as ElysiaLoggerContext;
         loggerCtx.isError = false;
 
@@ -125,9 +125,17 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
           return;
         }
 
-        ctx.store.startTime ??= 0;
-        ctx.store.endTime = performance.now();
-        ctx.store.responseTime = ctx.store.endTime - ctx.store.startTime;
+        type LoggerStore = {
+          startTime: number;
+          endTime: number;
+          responseTime: number;
+        };
+
+        const store = ctx.store as LoggerStore;
+
+        store.startTime ??= 0;
+        store.endTime = performance.now();
+        store.responseTime = store.endTime - store.startTime;
 
         log.info(ctx);
       })
