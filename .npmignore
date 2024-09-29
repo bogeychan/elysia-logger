@@ -5,6 +5,7 @@
 bun.lockb
 out.log
 
+src
 node_modules
 tsconfig.json
 
