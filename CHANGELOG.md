@@ -1,3 +1,9 @@
+# 0.1.3 - 29 September 2024
+
+Improvement:
+
+- fix `types` entry in `package.json` [#22](https://github.com/bogeychan/elysia-logger/issues/22)
+
 # 0.1.2 - 16 July 2024
 
 Bug fix:
