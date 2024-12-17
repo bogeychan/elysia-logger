@@ -1,3 +1,9 @@
+# 0.1.6 - 17 December 2024
+
+Bug fix:
+
+- Node.js module resolution (implicit index.js imports)
+
 # 0.1.5 - 17 December 2024
 
 Feature:
