@@ -59,6 +59,12 @@ export type ElysiaLoggerOptions = {
    * @default true
    */
   autoLogging?: boolean | { ignore: (ctx: ElysiaLoggerContext) => boolean };
+  /**
+   * The log level to use for logging the response
+   *
+   * @default "info"
+   */
+  useLevel?: pino.LevelWithSilent;
 };
 
 export interface ElysiaLogger<E = Elysia> extends Logger {

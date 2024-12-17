@@ -83,6 +83,7 @@ function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
 }
 
 function into(this: Logger, options: ElysiaLoggerOptions = {}) {
+  const useLevel = options.useLevel ?? "info";
   const autoLogging = options.autoLogging ?? true;
 
   delete options.autoLogging;
@@ -129,7 +130,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         ctx.store.endTime = performance.now();
         ctx.store.responseTime = ctx.store.endTime - ctx.store.startTime;
 
-        log.info(ctx);
+        log[useLevel](ctx);
       })
       .onError({ as: "global" }, (ctx) => {
         const loggerCtx = ctx as ElysiaLoggerContext;
@@ -146,7 +147,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         }
 
         if (ctx.code === "NOT_FOUND") {
-          log.info(ctx);
+          log[useLevel](ctx);
         } else {
           log.error(ctx);
         }
