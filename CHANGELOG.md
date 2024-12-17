@@ -1,3 +1,13 @@
+# 0.1.5 - 17 December 2024
+
+Feature:
+
+- new `useLevel` option [#24](https://github.com/bogeychan/elysia-logger/issues/24)
+
+Improvement:
+
+- bump `pino` to `9.5.0`
+
 # 0.1.4 - 29 September 2024
 
 Improvement:
