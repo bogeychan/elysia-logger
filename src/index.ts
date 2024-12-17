@@ -1,4 +1,4 @@
-import pino from "pino";
+import { pino } from "pino";
 import { Elysia } from "elysia";
 
 import type {
@@ -17,7 +17,7 @@ import type {
   _INTERNAL_ElysiaLoggerPluginAutoLoggingState,
   _INTERNAL_ElysiaLoggerPluginAutoLoggingEnabledOptions,
   _INTERNAL_ElysiaLoggerPluginAutoLoggingDisabledOptions,
-} from "./types";
+} from "./types.js";
 
 /**
  * If you call one of the derived methods of this plugin (such as: ctx.log.info(object)) with a request or context object,
@@ -27,7 +27,7 @@ import type {
  *
  * I highly recommend to read the [Pino documentation](https://getpino.io/#/docs/api?id=options) yourself to learn about additional options.
  */
-import { formatters, serializers } from "./config";
+import { formatters, serializers } from "./config/index.js";
 
 /**
  * The StreamLogger is used to write log entries to a stream such as the console output (default behavior).
@@ -160,8 +160,8 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
 const plugin = (options: LoggerOptions) =>
   into.bind(createPinoLoggerInternal(options))(options);
 
-export * from "./config";
+export * from "./config/index.js";
 
-export type { InferContext } from "./types";
+export type { InferContext } from "./types.js";
 
 export { pino } from "pino";

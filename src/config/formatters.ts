@@ -1,11 +1,11 @@
 import type { RouteSchema } from "elysia";
 import type { LoggerOptions } from "pino";
 
-import { serializeRequest } from "./serializers";
+import { serializeRequest } from "./serializers.js";
 import type {
   ElysiaLoggerContext,
   _INTERNAL_ElysiaLoggerPluginAutoLoggingState,
-} from "../types";
+} from "../types.js";
 
 export const formatters = {
   log(object) {

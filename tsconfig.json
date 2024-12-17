@@ -3,9 +3,9 @@
     "lib": [
       "ESNext"
     ],
-    "module": "esnext",
+    "module": "NodeNext",
     "target": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
