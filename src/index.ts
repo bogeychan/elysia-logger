@@ -112,7 +112,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
       .onRequest((ctx) => {
         ctx.store = { ...ctx.store, startTime: performance.now() };
       })
-      .onAfterResponse({ as: "global" }, (ctx) => {
+      .onAfterResponse((ctx) => {
         const loggerCtx = ctx as unknown as ElysiaLoggerContext;
         loggerCtx.isError = false;
 
@@ -132,7 +132,7 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
 
         log[useLevel](ctx);
       })
-      .onError({ as: "global" }, (ctx) => {
+      .onError((ctx) => {
         const loggerCtx = ctx as ElysiaLoggerContext;
         loggerCtx.isError = true;
 
@@ -151,7 +151,8 @@ function into(this: Logger, options: ElysiaLoggerOptions = {}) {
         } else {
           log.error(ctx);
         }
-      });
+      })
+      .as("global");
   }
 
   return app;

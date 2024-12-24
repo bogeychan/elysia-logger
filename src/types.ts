@@ -99,7 +99,6 @@ export type Logger = pino.Logger & BaseLoggerOptions;
 
 export type InferContext<T> = T extends Elysia<
   infer _Path,
-  infer _Scoped,
   infer Singleton,
   infer Definitions,
   infer _Metadata,
@@ -160,7 +159,6 @@ export type _INTERNAL_ElysiaLoggerPlugin<
   Store extends Elysia["store"] = Elysia["store"]
 > = Elysia<
   "",
-  false,
   {
     store: Store;
     derive: { readonly log: Logger };
