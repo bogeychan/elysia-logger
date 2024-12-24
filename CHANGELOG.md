@@ -1,3 +1,13 @@
+# 0.1.7 - 24 December 2024
+
+Bug fix:
+
+- bump `elysia` to `1.2.2`
+
+Improvement:
+
+- bump `pino` to `9.6.0`
+
 # 0.1.6 - 17 December 2024
 
 Bug fix:
