@@ -1,3 +1,13 @@
+# 0.1.8 - 22 January 2025
+
+Feature:
+
+- new `wrap` function to wrap existing `pino` logger [#27](https://github.com/bogeychan/elysia-logger/issues/27)
+
+Bug fix:
+
+- bump `elysia` to `1.2.10`
+
 # 0.1.7 - 24 December 2024
 
 Bug fix:
