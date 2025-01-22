@@ -24,6 +24,6 @@ const app = new Elysia()
 
     return "pino-pretty";
   })
-  .listen(8080);
+  .listen(3000);
 
 console.log(`Listening on ${app.server!.url}`);

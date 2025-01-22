@@ -21,6 +21,6 @@ const app = new Elysia()
 
     throw { message: "1234", name: "MyError" };
   })
-  .listen(8080);
+  .listen(3000);
 
 console.log(`Listening on ${app.server!.url}`);

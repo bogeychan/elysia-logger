@@ -28,7 +28,7 @@ const app = new Elysia()
 
     return "Hello World";
   })
-  .listen(8080);
+  .listen(3000);
 
 console.log(`Listening on ${app.server!.url}`);
 ```
@@ -119,6 +119,27 @@ app
     ctx.log.info(ctx, "Context");
 
     throw new Error("whelp");
+  });
+```
+
+### Use existing `pino` logger
+
+```ts
+import { pino } from "pino";
+import { wrap } from "@bogeychan/elysia-logger";
+
+const logger = pino(/* ... */);
+
+app
+  .use(
+    wrap(logger, {
+      /* ... */
+    })
+  )
+  .get("/", (ctx) => {
+    ctx.log.info(ctx, "Context");
+
+    return "wrapped!";
   });
 ```
 

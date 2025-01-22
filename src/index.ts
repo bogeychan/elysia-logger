@@ -55,12 +55,12 @@ export function fileLogger(options: ElysiaFileLoggerOptions) {
   return plugin(options);
 }
 
+type ElysiaLoggerInstance = ElysiaLogger<ReturnType<typeof into>>;
+
 /**
  * Create a logger instance like the plugin.
  */
 export function createPinoLogger(options: StandaloneLoggerOptions = {}) {
-  type ElysiaLoggerInstance = ElysiaLogger<ReturnType<typeof into>>;
-
   const log = createPinoLoggerInternal(options);
   // @ts-ignore
   (log as unknown as ElysiaLoggerInstance).into = into.bind(log);
@@ -80,6 +80,12 @@ function createPinoLoggerInternal(options: StandaloneLoggerOptions) {
   }
 
   return pino(options, streamOptions.stream!);
+}
+
+export function wrap(logger: Logger, options: ElysiaLoggerOptions = {}) {
+  return (into.bind(logger) as unknown as ElysiaLoggerInstance["into"])(
+    options
+  );
 }
 
 function into(this: Logger, options: ElysiaLoggerOptions = {}) {

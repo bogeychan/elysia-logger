@@ -10,6 +10,6 @@ const app = new Elysia()
     })
   )
   .get("/", () => "useLevel")
-  .listen(8080);
+  .listen(3000);
 
 console.log(`Listening on ${app.server!.url}`);
