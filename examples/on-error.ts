@@ -6,7 +6,14 @@ const log = createPinoLogger();
 
 const app = new Elysia()
   .onError((ctx) => {
-    log.error(ctx, ctx.error.name);
+    const { error } = ctx;
+
+    if ("code" in error && "response" in error) {
+      log.error(ctx, `HTTP ${error.code}: ${error.response}`);
+    } else {
+      log.error(ctx, error.name);
+    }
+
     return "onError";
   })
   .get("/", (ctx) => {
