@@ -34,14 +34,14 @@
     "release": "npm run build && npm run test && npm publish --access public"
   },
   "peerDependencies": {
-    "elysia": ">= 1.2.2"
+    "elysia": ">= 1.2.10"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.14",
-    "elysia": "1.2.2",
+    "@types/bun": "^1.2.0",
+    "elysia": "1.2.10",
     "pino-pretty": "^13.0.0",
     "tsd": "^0.31.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "dependencies": {
     "pino": "^9.6.0"

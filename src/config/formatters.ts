@@ -15,8 +15,17 @@ export const formatters = {
       };
 
       if (object.isError) {
-        log.code = object.code;
-        log.message = object.error.message;
+        const { code, error } = object;
+
+        log.code = code;
+
+        if ("message" in error) {
+          log.message = error.message;
+        } else if ("code" in error && "response" in error) {
+          log.message = `HTTP ${error.code}: ${error.response}`;
+        } else {
+          log.message = "Unknown error";
+        }
       } else {
         if (object.store.responseTime) {
           log.responseTime = object.store.responseTime;

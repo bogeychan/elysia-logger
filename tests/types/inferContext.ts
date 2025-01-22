@@ -114,6 +114,7 @@ import { type InferContext, logger } from "../../src";
             | "INTERNAL_SERVER_ERROR"
             | "INVALID_COOKIE_SIGNATURE"
             | "myError"
+            | number
             | undefined
           >(ctx.code);
         }
