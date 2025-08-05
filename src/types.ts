@@ -93,7 +93,7 @@ export interface ElysiaLogger<E = Elysia> extends Logger {
   into(options?: ElysiaLoggerOptions): E;
 }
 
-interface BaseLoggerOptions extends pino.LoggerOptions {}
+export interface BaseLoggerOptions extends pino.LoggerOptions {}
 
 export type Logger = pino.Logger & BaseLoggerOptions;
 

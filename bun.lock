@@ -14,7 +14,7 @@
         "typescript": "^5.7.3",
       },
       "peerDependencies": {
-        "elysia": ">= 1.2.3",
+        "elysia": ">= 1.2.10",
       },
     },
   },
