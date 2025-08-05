@@ -1,3 +1,13 @@
+# 0.1.9 - 05 August 2025
+
+Bug fix:
+
+- export type `BaseLoggerOptions`
+
+Improvement:
+
+- add `pino` to `peerDependencies`
+
 # 0.1.8 - 22 January 2025
 
 Feature:
