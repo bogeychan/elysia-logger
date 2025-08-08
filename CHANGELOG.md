@@ -1,3 +1,9 @@
+# 0.1.10 - 08 August 2025
+
+Bug fix:
+
+- `pino@9.8.0` import behavior [#41](https://github.com/bogeychan/elysia-logger/issues/41)
+
 # 0.1.9 - 05 August 2025
 
 Bug fix:
