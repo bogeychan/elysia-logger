@@ -72,7 +72,7 @@ import { type InferContext, logger } from "../../src";
     logger({
       customProps(ctx: InferContext<typeof app>) {
         if (!ctx.isError) {
-          expectType<42 | undefined>(ctx.myProperty);
+          expectType<number | undefined>(ctx.myProperty);
         }
         return {};
       },
@@ -113,6 +113,7 @@ import { type InferContext, logger } from "../../src";
             | "PARSE"
             | "INTERNAL_SERVER_ERROR"
             | "INVALID_COOKIE_SIGNATURE"
+            | "INVALID_FILE_TYPE"
             | "myError"
             | number
             | undefined

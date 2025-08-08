@@ -1,4 +1,4 @@
-import { pino } from "pino";
+import pino from "pino";
 import { Elysia } from "elysia";
 
 import type {
@@ -171,4 +171,4 @@ export * from "./config/index.js";
 
 export type { InferContext } from "./types.js";
 
-export { pino } from "pino";
+export { pino };
