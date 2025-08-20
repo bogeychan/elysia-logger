@@ -1,5 +1,7 @@
 import { expect } from "bun:test";
 import { pino } from "../src";
+import type { AnyElysia } from "elysia";
+import { semver } from "bun";
 
 declare module "bun:test" {
   interface Matchers<T> {
@@ -13,6 +15,16 @@ declare module "bun:test" {
     toHaveElysiaLoggerResponseProps(this: Matchers<object>): void;
   }
 }
+
+const { devDependencies } = await Bun.file("./package.json").json();
+const ELYSIA_VERSION = devDependencies["elysia"];
+
+// https://github.com/elysiajs/elysia/issues/713#issuecomment-3164018384
+// make sure to upgrade elysia to at least: 1.3.13 -> https://github.com/elysiajs/elysia/issues/1348
+export const HAS_ON_AFTER_RESPONSE_FIX = semver.satisfies(
+  ELYSIA_VERSION,
+  "^1.3.9"
+);
 
 expect.extend({
   toHavePinoProps(msg) {
@@ -98,3 +110,12 @@ export const newReq = (params?: {
   method?: string;
   body?: string;
 }) => new Request(`http://localhost${params?.path ?? "/"}`, params);
+
+export const handleWithTick = async (app: AnyElysia, req: Request) => {
+  await app.handle(req);
+
+  if (HAS_ON_AFTER_RESPONSE_FIX) {
+    // wait for next tick: https://github.com/elysiajs/elysia/issues/713#issuecomment-3155547731
+    await Bun.sleep(1);
+  }
+};

@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 import { describe, expect, it } from "bun:test";
 
 import { logger } from "../src";
-import { InMemoryDestination, newReq } from "./utils";
+import { handleWithTick, InMemoryDestination, newReq } from "./utils";
 
 describe("auto logging", () => {
   it("should by default", async () => {
@@ -11,7 +11,7 @@ describe("auto logging", () => {
     const app = new Elysia().use(logger({ stream })).get("/", () => "");
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);
@@ -26,7 +26,7 @@ describe("auto logging", () => {
       .get("/", () => "");
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);
@@ -41,7 +41,7 @@ describe("auto logging", () => {
       .get("/", () => "");
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(0);
   });
@@ -63,7 +63,7 @@ describe("auto logging", () => {
       .get("/", () => "");
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);
@@ -87,7 +87,7 @@ describe("auto logging", () => {
       .get("/", () => "");
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(0);
   });

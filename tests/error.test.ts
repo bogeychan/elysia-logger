@@ -2,7 +2,12 @@ import { Elysia, t } from "elysia";
 import { describe, it, expect } from "bun:test";
 
 import { logger, type InferContext } from "../src";
-import { InMemoryDestination, newReq } from "./utils";
+import {
+  handleWithTick,
+  HAS_ON_AFTER_RESPONSE_FIX,
+  InMemoryDestination,
+  newReq,
+} from "./utils";
 
 describe("Error", () => {
   it("should log during ParseError", async () => {
@@ -34,7 +39,7 @@ describe("Error", () => {
       headers: { "Content-Type": "application/json" },
       body: "",
     });
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(isParseError).toBeTrue();
     expect(stream.messages.length).toBe(2);
@@ -62,13 +67,15 @@ describe("Error", () => {
     );
 
     const req = newReq({ path: "/notFound" });
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(isNotFoundError).toBeTrue();
-    expect(stream.messages.length).toBe(1); // TODO: should be 2 but onAfterResponse skipped
+    expect(stream.messages.length).toBe(HAS_ON_AFTER_RESPONSE_FIX ? 2 : 1); // TODO: should be 2 but onAfterResponse skipped
     stream.expectToHaveContextProps(0, req);
-    // const msg = stream.expectToHaveContextProps(1, req);
-    // expect(msg).toHaveElysiaLoggerResponseProps();
+    if (HAS_ON_AFTER_RESPONSE_FIX) {
+      const msg = stream.expectToHaveContextProps(1, req);
+      expect(msg).toHaveElysiaLoggerResponseProps();
+    }
   });
 
   it("should log during ValidationError", async () => {
@@ -100,7 +107,7 @@ describe("Error", () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({}),
     });
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(isValidationError).toBeTrue();
     expect(stream.messages.length).toBe(2);
@@ -134,7 +141,7 @@ describe("Error", () => {
       });
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(isCustomError).toBeTrue();
     expect(stream.messages.length).toBe(2);

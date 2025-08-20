@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 import { describe, it, expect } from "bun:test";
 
 import { logger } from "../src";
-import { InMemoryDestination, newReq } from "./utils";
+import { handleWithTick, InMemoryDestination, newReq } from "./utils";
 
 describe("custom props", () => {
   it("should log request props", async () => {
@@ -16,7 +16,7 @@ describe("custom props", () => {
       });
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     stream.expectToHaveRequestProps(0, req);
@@ -33,7 +33,7 @@ describe("custom props", () => {
       });
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     stream.expectToHaveContextProps(0, req);
@@ -60,7 +60,7 @@ describe("custom props", () => {
       });
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);
@@ -88,7 +88,7 @@ describe("custom props", () => {
       });
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveRequestProps(0, req);
@@ -113,7 +113,7 @@ describe("custom props", () => {
       .get("/", () => "");
 
     const req = newReq();
-    await app.handle(req);
+    await handleWithTick(app, req);
 
     expect(stream.messages.length).toBe(1);
     const msg = stream.expectToHaveContextProps(0, req);
