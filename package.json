@@ -33,6 +33,9 @@
     "build": "rm -fr dist && tsc --project tsconfig.esm.json",
     "release": "npm run build && npm run test && npm publish --access public"
   },
+  "resolutions": {
+    "@sinclair/typebox": "^0.34.41"
+  },
   "peerDependencies": {
     "elysia": ">= 1.2.10",
     "pino": ">= 9.6.0"
